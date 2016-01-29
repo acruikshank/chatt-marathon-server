@@ -3,6 +3,7 @@ var express = require('express');
 var concat = require('concat-stream');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ server: server });
+var port = process.env.PORT || 5000;
 
 var app = express();
 
@@ -52,4 +53,4 @@ wss.on('connection', function connection(ws) {
 });
 
 server.on('request', app);
-server.listen(8000, function () { console.log('Listening on ' + server.address().port) });
+server.listen(port, function () { console.log('Listening on ' + server.address().port) });
