@@ -78,12 +78,6 @@ function recordDeviceData(device, session, data) {
   }
 }
 
-/* Write data
-  stat file recordings/{deviceID}-{sessionID}.csv
-  if (! exists) write header to file
-  append data
-*/
-
 wss.on('connection', function connection(ws) {
 
   connections.push(ws);
