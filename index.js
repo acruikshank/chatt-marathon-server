@@ -27,7 +27,7 @@ app.get('/recorded', function(req, res) {
     res.send('<html><head><title>recordings</title><link rel="stylesheet" type="text/css" href="/css/recordings.css"></head>'
       +'<body><h1>Recordings</h1><ul><li>'
       + files.filter(function(f){return f.match(/\.csv$/)})
-             .map(function(file) { return '<a href="'+file+'">'+file+'</a>'; }).join('</li><li>')
+             .map(function(file) { return '<a href="/recordings/'+file+'">'+file+'</a>'; }).join('</li><li>')
       + '</li></ul></body></html>');
   });
 })

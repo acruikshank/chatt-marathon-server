@@ -25,7 +25,7 @@ var diff2Color = '#ff0';
 var lastSample = new Float32Array(25);
 var lastMix1 = 0, lastMix2 = 0;
 var lastVar1 = 0, lastVar2 = 0;
-var ease = .01;
+var ease = .05;
 var mapContext, mapXScale, mapYScale;
 var ihscale;
 
@@ -78,7 +78,8 @@ function drawData() {
       vscale = vscales[Math.floor(j/5)];
       ctx.fillStyle = colors[j%5];
       ctx.beginPath();
-      var point = Math.log(sample[j] + 1) - avg;
+      // var point = Math.log(sample[j] + 1) - avg;
+      var point = Math.log(sample[j] + 1);
       value = lastSample[j] = lerp(lastSample[j],point,ease);
       // var y = rescale(vscale, Math.log(value + 1));
       var y = rescale(vscale, value)
