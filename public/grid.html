@@ -31,12 +31,35 @@
 
       uniform float theta;
       uniform vec2 size;
+      uniform vec4 diagonals;
 
       void main(void) {
-        float offset = length(gl_FragCoord.xy - size*vec2(.33,.5));
-        float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
-        vec2 coord = sin(.125 *((gl_FragCoord.xy) * distort));
-        float alpha = clamp(1.0 - offset*.001,0.0,1.0)*50.0*(max(0.0,max(coord.x, coord.y))-.98);
+        /*
+            compute guassian about angles (aShape)
+            compute function that is zero at zero, 1 at x and 0 at inf (rShape)
+            compute gaussian at center (cShape)
+            put edge signals in vec4 (outerSignal)
+            shape = outerSignal (dot) aShape * rShape + centerSignal * cShape
+         */
+        vec2 center = size*vec2(.33,.5);
+        vec2 offset = gl_FragCoord.xy - center;
+        float angle = atan(offset.y, offset.x);
+        float norm = length(offset);
+
+        vec4 angleOffset = diagonals - angle;
+        vec4 aShape = exp(-angleOffset*angleOffset*6.0);
+        float logR = log(norm*0.0025);
+        float rShape = exp(-logR*logR*10.0);
+        float cShape = exp(-norm*norm * 0.00004);
+
+        // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
+
+        float distort = 1.0 + norm * 0.01;
+        float shape = dot(aShape,vec4(rShape)) + cShape;
+        vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .025*theta),shape);
+        vec2 coord = sin(.16 *mapCoord);
+        float alpha = clamp(1.0 - length(offset)*.0012,0.0,1.0)*50.0*(max(0.0,max(coord.x, coord.y))-.98);
+        // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
         gl_FragColor = vec4(1.0,1.0,1.0, alpha);
       }
     </script>
@@ -95,6 +118,9 @@ function render() {
 
   var thetaUniform = gl.getUniformLocation(gridShader, "size");
   gl.uniform2f(thetaUniform, canvas.width, canvas.height);
+
+  var diagonalsUniform = gl.getUniformLocation(gridShader, "diagonals");
+  gl.uniform4f(diagonalsUniform, -Math.PI*1/4, -Math.PI*3/4, Math.PI*1/4, Math.PI*3/4);
 
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
