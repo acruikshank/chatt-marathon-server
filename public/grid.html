@@ -8,8 +8,7 @@
         background: linear-gradient(to right, #47273a 0%,#43666d 100%);
       }
       img { width: 200%; height: 200%; margin-left: -33%; position: absolute; opacity: .15 }
-      xcanvas {width: 49%; vertical-align: top;}
-      video {position: absolute;}
+      #c { position: absolute; left: 0; top: 0; }
     </style>
     <script src="scripts/sylvester.js" type="text/javascript"></script>
     <script src="scripts/glUtils.js" type="text/javascript"></script>
@@ -32,16 +31,14 @@
       uniform float theta;
       uniform vec2 size;
       uniform vec4 diagonals;
+      uniform float samples[25];
 
       void main(void) {
         /*
-            compute guassian about angles (aShape)
-            compute function that is zero at zero, 1 at x and 0 at inf (rShape)
-            compute gaussian at center (cShape)
             put edge signals in vec4 (outerSignal)
             shape = outerSignal (dot) aShape * rShape + centerSignal * cShape
          */
-        vec2 center = size*vec2(.33,.5);
+        vec2 center = size*vec2(.33,.6);
         vec2 offset = gl_FragCoord.xy - center;
         float angle = atan(offset.y, offset.x);
         float norm = length(offset);
@@ -52,11 +49,13 @@
         float rShape = exp(-logR*logR*10.0);
         float cShape = exp(-norm*norm * 0.00004);
 
+        vec4 signal = vec4(samples[0], samples[5], samples[10], samples[15]);
+
         // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
 
         float distort = 1.0 + norm * 0.01;
-        float shape = dot(aShape,vec4(rShape)) + cShape;
-        vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .025*theta),shape);
+        float shape = rShape * dot(aShape,0.00005*signal) + cShape * 0.0001*samples[20];
+        vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .1*theta),shape);
         vec2 coord = sin(.16 *mapCoord);
         float alpha = clamp(1.0 - length(offset)*.0012,0.0,1.0)*50.0*(max(0.0,max(coord.x, coord.y))-.98);
         // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
@@ -69,7 +68,8 @@
 
   <body>
     <img src="runner.jpeg"/>
-    <canvas id="c">
+    <canvas id="c"></canvas>
+    <canvas id="glCanvas">
       Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
     </canvas>
   </body>
@@ -81,15 +81,19 @@
  var gridBuffer;
  var dTheta = 1;
  var theta = 0;
+ var ease = .05;
+ var lastSample = new Float32Array(25);
 
 var sampler = location.hash
   ? RecordedData(location.hash.slice(1), 10)
   : LiveData();
 
+var grapher = Grapher();
+
 start()
 
 function start() {
-  canvas = document.getElementById("c");
+  canvas = document.getElementById("glCanvas");
   canvas.width = canvas.offsetWidth * (devicePixelRatio||1);
   canvas.height = canvas.offsetHeight * (devicePixelRatio||1);
 
@@ -122,11 +126,67 @@ function render() {
   var diagonalsUniform = gl.getUniformLocation(gridShader, "diagonals");
   gl.uniform4f(diagonalsUniform, -Math.PI*1/4, -Math.PI*3/4, Math.PI*1/4, Math.PI*3/4);
 
+  var sample = sampler.getSample();
+  for (var j=0; j<sample.length; j++)
+    sample[j] = lerp(lastSample[j],sample[j],ease);
+  lastSample = sample;
+
+  var samplesUniform = gl.getUniformLocation(gridShader, "samples");
+  gl.uniform1fv(samplesUniform, sample);
+
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   SketchbookUtil.drawFlatBackground(gl, gridShader);
 
+  grapher.animate(sample, sampler.currentTime);
+
   requestAnimationFrame(render);
+}
+
+function lerp(a,b,x) { return a + x*(b-a); }
+
+function Grapher() {
+  var canvas = document.getElementById('c');
+  var cw = canvas.width = canvas.offsetWidth;
+  var ch = canvas.height = canvas.offsetHeight;
+
+  var ctx = canvas.getContext('2d');
+  var colors = ['hsla(0,100%,60%,0.125)','hsla(30,100%,50%,0.0625)','hsla(60,100%,50%,0.2)','hsla(120,100%,50%,0.0625)','hsla(180,100%,50%,0.0625)']
+  var lastSample = new Float32Array(25);
+  var ease = .15;
+  var mapContext, mapXScale, mapYScale;
+  var hscale;
+
+  function animate(sample, currentTime) {
+    if (!currentTime) return;
+    if (!hscale)
+      hscale = {dmn: currentTime, dmx: currentTime + 1000, rmn: 0, rmx: cw};
+
+    var vscales = [
+      {dmn: 0, dmx: 11, rmn: ch, rmx: .95*ch},
+      {dmn: 0, dmx: 11, rmn: .95*ch, rmx: .9*ch},
+      {dmn: 0, dmx: 11, rmn: .9*ch, rmx: .85*ch},
+      {dmn: 0, dmx: 11, rmn: .85*ch, rmx: .8*ch},
+      {dmn: 0, dmx: 11, rmn: .8*ch, rmx: .75*ch}
+    ];
+
+    ctx.globalAlpha = 0.1;
+    var x = rescale(hscale, currentTime);
+    for (var j=0; j<sample.length; j++) {
+      vscale = vscales[Math.floor(j/5)];
+      ctx.fillStyle = colors[j%5];
+      ctx.beginPath();
+      value = sample[j];
+      var y = rescale(vscale, Math.log(value + 1));
+      ctx.arc(x,y,2,0,2*Math.PI,true);
+      ctx.fill();
+    }
+  }
+
+  function rescale(scale, x) {
+    return scale.rmn + ((x - scale.dmn) / (scale.dmx - scale.dmn))*(scale.rmx - scale.rmn);
+  }
+  return {animate: animate};
 }
 
   </script>
