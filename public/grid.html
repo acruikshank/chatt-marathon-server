@@ -34,10 +34,6 @@
       uniform float samples[25];
 
       void main(void) {
-        /*
-            put edge signals in vec4 (outerSignal)
-            shape = outerSignal (dot) aShape * rShape + centerSignal * cShape
-         */
         vec2 center = size*vec2(.33,.6);
         vec2 offset = gl_FragCoord.xy - center;
         float angle = atan(offset.y, offset.x);
@@ -54,14 +50,13 @@
         // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
 
         float distort = 1.0 + norm * 0.01;
-        float shape = rShape * dot(aShape,0.00005*signal) + cShape * 0.0001*samples[20];
+        float shape = rShape * dot(aShape,0.005*signal) + cShape * 0.01*samples[20];
         vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .1*theta),shape);
         vec2 coord = sin(.16 *mapCoord);
         float alpha = clamp(1.0 - length(offset)*.0012,0.0,1.0)*50.0*(max(0.0,max(coord.x, coord.y))-.98);
         // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
         gl_FragColor = vec4(1.0,1.0,1.0, alpha);
       }
-    </script>
     </script>
 
   </head>

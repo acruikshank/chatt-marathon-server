@@ -32,29 +32,6 @@ app.get('/recorded', function(req, res) {
   });
 })
 
-app.post('/api/1.0/samples/:device/:session', function(req, res) {
-  var body = req.body.toString('binary');
-
-  var buf = new ArrayBuffer(body.length);
-  var byteView = new Int8Array(buf);
-  for (var i=0; i<body.length; i++)
-    byteView[i] = body.charCodeAt(i);
-
-  var samples = new Float64Array(buf);
-  var start = new Date(1000*samples[0]);
-  console.log('time:',start, 'user:',req.params.device, 'session:', req.params.session, 'length:',body.length / 8);
-  recordDeviceData(req.params.device, req.params.session, samples);
-
-  var times = [];
-  for (var i=0; i<samples.length; i+=26) times.push( new Date(1000*samples[i]).getTime() - start.getTime());
-  var valuesOnly = new Float32Array(Array.prototype.slice.call(samples,1));
-  connections.forEach(function(connection) {
-    connection.send(valuesOnly, {binary:true});
-  })
-
-  res.sendStatus(200);
-})
-
 function recordDeviceData(device, session, data) {
   var path = 'public/recordings/'+device.replace(/[^\w-]/g,'')+'-'+session.replace(/[^\w-]/g,'')+'.csv';
   fs.stat(path, fileExists);
@@ -78,6 +55,25 @@ function recordDeviceData(device, session, data) {
   }
 }
 
+app.post('/api/1.0/samples/:device/:session', function(req, res) {
+  var body = req.body.toString('binary');
+
+  var buf = new ArrayBuffer(body.length);
+  var byteView = new Int8Array(buf);
+  for (var i=0; i<body.length; i++)
+    byteView[i] = body.charCodeAt(i);
+
+  var samples = new Float64Array(buf);
+  var start = new Date(1000*samples[0]);
+  console.log('time:',start, 'user:',req.params.device, 'session:', req.params.session, 'length:',body.length / 8);
+  recordDeviceData(req.params.device, req.params.session, samples);
+
+  var message = JSON.stringify({device:req.params.device, data:Array.prototype.slice.call(samples)});
+  connections.forEach(function(connection) { connection.send(message); });
+
+  res.sendStatus(200);
+})
+
 wss.on('connection', function connection(ws) {
 
   connections.push(ws);
@@ -92,7 +88,7 @@ wss.on('connection', function connection(ws) {
     if (~index) connections.splice(index,1);
   })
 
-  ws.send(new Float32Array([200]), {binary:true});
+  ws.send(JSON.stringify(200));
 });
 
 server.on('request', app);
