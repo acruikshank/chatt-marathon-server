@@ -1,9 +1,11 @@
+require('dotenv').config();
 var server = require('http').createServer();
 var express = require('express');
 var fs = require('fs');
 var concat = require('concat-stream');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ server: server });
+var db = require('./db');
 var port = process.env.PORT || 5000;
 
 var SAMPLE_SIZE = 26;
@@ -33,26 +35,8 @@ app.get('/recorded', function(req, res) {
 })
 
 function recordDeviceData(device, session, data) {
-  var path = 'public/recordings/'+device.replace(/[^\w-]/g,'')+'-'+session.replace(/[^\w-]/g,'')+'.csv';
-  fs.stat(path, fileExists);
-
-  function fileExists(err, stat) { stat ? appendData() : createFile(); }
-
-  function createFile() {
-    var writer = fs.createWriteStream(path, {flags:'w'})
-    writer.write('Time, Theta AF3,Alpha AF3,Low beta AF3,High beta AF3, Gamma AF3, Theta AF4,Alpha AF4,Low beta AF4,High beta AF4, Gamma AF4, Theta T7,Alpha T7,Low beta T7,High beta T7, Gamma T7, Theta T8,Alpha T8,Low beta T8,High beta T8, Gamma T8, Theta Pz,Alpha Pz,Low beta Pz,High beta Pz, Gamma Pz')
-    writer.end('\n')
-    writer.on('finish', appendData)
-  }
-
-  function appendData() {
-    var writer = fs.createWriteStream(path, {flags:'a'})
-    for (var i=0; i<data.length; i++) {
-      writer.write(String(data[i]));
-      writer.write( (i+1)%SAMPLE_SIZE ? ',' : '\n');
-    }
-    writer.end();
-  }
+  for (var i=0; i<data.length; i+=26)
+    db.saveSample(device, new Date(1000*data[i]), Array.prototype.slice.call(data, i+1, i+26));
 }
 
 app.post('/api/1.0/samples/:device/:session', function(req, res) {
