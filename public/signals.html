@@ -18,7 +18,7 @@ var cw = canvas.width = 2*canvas.offsetWidth;
 var ch = canvas.height = 2*canvas.offsetHeight;
 var ctx = canvas.getContext('2d');
 var colors = ['hsla(0,100%,60%,0.25)','hsla(30,100%,50%,0.125)','hsla(60,100%,50%,0.4)','hsla(120,100%,50%,0.125)','hsla(180,100%,50%,0.125)']
-var diff1Color = '#0ff';
+var diff1Color = '#0c9';
 var diff2Color = '#ff0';
 var lastSample = new Float32Array(25);
 
@@ -31,7 +31,7 @@ var lastBandAvg = new Float32Array(5);
 var lastAvg = 0;
 var lastMix1 = 0, lastMix2 = 0;
 var lastVar1 = 0, lastVar2 = 0;
-var ease = .02;
+var ease = .5;
 var avgEase = .01;
 var mapContext, mapXScale, mapYScale;
 var ihscale;
@@ -91,7 +91,7 @@ function drawData() {
       value = lastSample[j] = lerp(lastSample[j],point,ease);
       // var y = rescale(vscale, Math.log(value + 1));
       var y = rescale(vscale, value)
-      drawPoint(ctx,x,y);
+      // drawPoint(ctx,x,y);
 
       sensorAvg[sensor] += sample[j];
       bandAvg[band] += sample[j];
@@ -102,32 +102,44 @@ function drawData() {
     }
     ctx.globalAlpha = 1.0;
 
-    ctx.fillStyle = '#fff';
-    drawPoint(ctx, x, rescale(avgScale, Math.log(lastAvg+1)), 3);
-    ctx.fillStyle = '#09f';
-    drawPoint(ctx, x, rescale(bandScale, Math.log(lastBandAvg[0]+1) - Math.log(lastBandAvg[4]+1)), 3);
-    ctx.fillStyle = '#f30';
-    drawPoint(ctx, x, rescale(bandScale, 2*(Math.log(lastBandAvg[1]+1) - Math.log(lastBandAvg[2]+1))), 3);
+    // ctx.fillStyle = '#fff';
+    // drawPoint(ctx, x, rescale(avgScale, Math.log(lastAvg+1)), 3);
+    // ctx.fillStyle = '#09f';
+    // drawPoint(ctx, x, rescale(bandScale, Math.log(lastBandAvg[0]+1) - Math.log(lastBandAvg[4]+1)), 3);
+    // ctx.fillStyle = '#f30';
+    // drawPoint(ctx, x, rescale(bandScale, 2*(Math.log(lastBandAvg[1]+1) - Math.log(lastBandAvg[2]+1))), 3);
 
+    for (var j=0; j<5; j++) {
+      ctx.fillStyle = colors[j];
+      var diff = Math.log(lastSensorAvg[j]+1) - Math.log(lastAvg+1);
+      drawPoint(ctx, x, rescale(bandScale, .1*diff*diff), 3);
+    }
+
+    // ctx.strokeWeight = 1;
     // for (var j=0; j<5; j++) {
     //   vscale = vscales[j];
-    //   value = Math.log(sample[5*j]+1) - Math.log(sample[5*j+4]+1);
+    //   var y0 = rescale(vscale, 0);
+    //   value = Math.log(sample[5*j+1]+1) - Math.log(sample[5*j+2]+1);
     //   lastMix1 = lerp(lastMix1, value, ease);
-    //   lastVar1 = lerp(lastVar1, 5*Math.pow(value-lastMix1,2), ease);
+    //   lastVar1 = lerp(lastVar1, 10*Math.pow(value-lastMix1,2), ease);
     //   var y = rescale(vscale, lastVar1);
-    //   ctx.fillStyle = diff1Color;
+    //   ctx.strokeStyle = diff1Color;
     //   ctx.beginPath();
-    //   ctx.arc(x,y,1.5,0,2*Math.PI,true);
-    //   ctx.fill();
+    //   ctx.moveTo(x,y0);
+    //   ctx.lineTo(x,y);
+    //   ctx.stroke();
+    //   ctx.closePath();
     //
     //   value = Math.log(sample[5*j]+1) - Math.log(sample[5*j+1]+1);
     //   lastMix2 = lerp(lastMix2, value, ease);
-    //   lastVar2 = lerp(lastVar2, 5*Math.pow(value-lastMix2,2), ease);
+    //   lastVar2 = lerp(lastVar2, 10*Math.pow(value-lastMix2,2), ease);
     //   var y = rescale(vscale, lastVar2);
-    //   ctx.fillStyle = diff2Color;
+    //   ctx.strokeStyle = diff2Color;
     //   ctx.beginPath();
-    //   ctx.arc(x,y,1.5,0,2*Math.PI,true);
-    //   ctx.fill();
+    //   ctx.moveTo(x,y0);
+    //   ctx.lineTo(x,y);
+    //   ctx.stroke();
+    //   ctx.closePath();
     // }
     // ctx.fillStyle = '#f00';
     // ctx.beginPath();

@@ -30,6 +30,14 @@ RecordedData = function(file, playbackRate, cb) {
     times = new Float64Array(values[0]);
     data = values.slice(1).map(function(v) { return new Float64Array(v) });
 
+    var samples = values[0].map(function(time,i) { return {
+      time: new Date(time*1000),
+      sample:values.slice(1).map(function(v,j) {return v[i];})
+    }});
+    samples.forEach(function(sample,i) { sample.next = samples[i+1]; })
+    out.buffer = samples[0];
+    out.bufferSize = samples.length;
+
     out.startTime = times[0];
     out.endTime = times[times.length-1];
     out.timeRange = out.endTime - out.startTime;

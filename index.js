@@ -49,7 +49,8 @@ app.post('/api/1.0/samples/:device/:session', function(req, res) {
 
   var samples = new Float64Array(buf);
   var start = new Date(1000*samples[0]);
-  console.log('time:',start, 'user:',req.params.device, 'session:', req.params.session, 'length:',body.length / 8);
+  console.log('time:',start, 'user:',req.params.device, 'session:', req.params.session, 'length:',body.length / 8,
+    'location:', req.headers['geo-position']);
   recordDeviceData(req.params.device, req.params.session, samples);
 
   var message = JSON.stringify({device:req.params.device, data:Array.prototype.slice.call(samples)});

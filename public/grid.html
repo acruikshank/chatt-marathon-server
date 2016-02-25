@@ -50,7 +50,7 @@
         // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
 
         float distort = 1.0 + norm * 0.01;
-        float shape = rShape * dot(aShape,0.005*signal) + cShape * 0.01*samples[20];
+        float shape = rShape * dot(aShape,0.0001*signal) + cShape * 0.0002*samples[20];
         vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .1*theta),shape);
         vec2 coord = sin(.16 *mapCoord);
         float alpha = clamp(1.0 - length(offset)*.0012,0.0,1.0)*50.0*(max(0.0,max(coord.x, coord.y))-.98);
