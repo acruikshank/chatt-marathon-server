@@ -13,7 +13,7 @@ RecordedData = function(file, playbackRate, cb) {
     request.onreadystatechange = function() {
       if (request.readyState > 3) {
         if (request.status != 200)
-          displayError(request.responseText);
+          console.error(request.responseText);
         else
           uploadComplete(request.response);
       }
@@ -75,6 +75,9 @@ RecordedData = function(file, playbackRate, cb) {
       : sampleAt(time, midpoint, end)
   }
 
+  out.historyBuffer = function() {
+    return out.buffer;
+  }
 
   fetchData();
 

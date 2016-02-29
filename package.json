@@ -9,12 +9,15 @@
   "author": "Alex Cruikshank",
   "license": "ISC",
   "dependencies": {
+    "JSONStream": "^1.0.7",
     "binary": "^0.3.0",
     "concat-stream": "^1.5.1",
     "dotenv": "^2.0.0",
+    "event-stream": "^3.3.2",
     "express": "^4.13.3",
     "node-pg-migrate": "0.0.9",
     "pg": "^4.4.6",
+    "pg-query-stream": "^1.0.0",
     "ws": "^1.0.1"
   }
 }

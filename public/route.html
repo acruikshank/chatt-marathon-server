@@ -41,8 +41,8 @@ var positions = PositionData('data/run-'+date+'-position.gpx', drawMap);
 
 function drawData() {
   var hscale = {dmn: sampler.startTime + .0*sampler.timeRange, dmx: sampler.startTime + 1.0*sampler.timeRange, rmn: 0, rmx: cw};
-  var dataScaleMn = -4;
-  var dataScaleMx = 4;
+  var dataScaleMn = 0;
+  var dataScaleMx = 12;
   var vscales = [
     {dmn: dataScaleMn, dmx: dataScaleMx, rmn: ch, rmx: .8*ch},
     {dmn: dataScaleMn, dmx: dataScaleMx, rmn: .8*ch, rmx: .6*ch},
