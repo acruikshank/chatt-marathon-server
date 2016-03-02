@@ -121,12 +121,12 @@
     </canvas>
   </body>
   <script>
-  var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
-
-  var canvas1 = document.getElementById('grid1');
-  canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
-  canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
-  Grid(canvas1, sampler1, .5, .5);
+  // var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
+  //
+  // var canvas1 = document.getElementById('grid1');
+  // canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
+  // canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
+  // Grid(canvas1, sampler1, .5, .5);
 
   var sampler2 = RecordedData('data/run-20160206-04_45.csv', 10, startTimeSeries2);
   var canvas2 = document.getElementById('grid2');
@@ -134,12 +134,12 @@
   canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
   Grid(canvas2, sampler2, .5, .5);
 
-  function startTimeSeries1() {
-    var timeSeries1 = document.getElementById('time-series1');
-    timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
-    timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
-    TimeSeries(timeSeries1, sampler1, .001);
-  }
+  // function startTimeSeries1() {
+  //   var timeSeries1 = document.getElementById('time-series1');
+  //   timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
+  //   timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
+  //   TimeSeries(timeSeries1, sampler1, .001);
+  // }
 
   function startTimeSeries2() {
     var timeSeries2 = document.getElementById('time-series2');
@@ -159,21 +159,19 @@
     // // canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
     // // Grid(canvas2, sampler2, .5, .5);
     // //
-    // function startTimeSeries1() {
-    //   var liveSampler = LiveData(graphLeft);
-    //
-    //   function graphLeft() {
-    //     var canvas1 = document.getElementById('grid1');
-    //     canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
-    //     canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
-    //     Grid(canvas1, liveSampler, .5, .5);
-    //
-    //     var timeSeries1 = document.getElementById('time-series1');
-    //     timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
-    //     timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
-    //     TimeSeries(timeSeries1, liveSampler);
-    //   }
-    // }
+    var liveSampler = LiveData(graphLeft);
+
+    function graphLeft() {
+      var canvas1 = document.getElementById('grid1');
+      canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
+      canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
+      Grid(canvas1, liveSampler, .5, .5);
+
+      var timeSeries1 = document.getElementById('time-series1');
+      timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
+      timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
+      TimeSeries(timeSeries1, liveSampler);
+    }
 
     // function startTimeSeries2() {
     //   var timeSeries2 = document.getElementById('time-series2');
