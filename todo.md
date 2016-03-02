@@ -1,16 +1,19 @@
 TODO
 ======
 
-- [*] Server updates client with all recent samples
-- [*] Client plays back recent samples at appropriate time
-- [*] Server sends data from multiple devices
-- [*] Server records processed data
-- [*] Save location data to database and transmit it with sample data
-- [ ] Have recorded data come from database
-- [ ] Client can ping server through websocket
-- [ ] Client reconnects with backoff?
+- [x] Server updates client with all recent samples
+- [x] Client plays back recent samples at appropriate time
+- [x] Server sends data from multiple devices
+- [x] Server records processed data
+- [x] Save location data to database and transmit it with sample data
+- [x] Server can catch up client with processed data.
+- [x] Have recorded data come from database
 - [ ] Server and Client sync clocks on initial ws connection
 - [ ] Client can distinguish between device data and visualize both simultaneously.
-- [ ] Server can catch up client with processed data.
+- [ ] Client can ping server through websocket
+- [ ] Client reconnects with backoff?
+- [ ] Worker to render graphs on different core
+- [ ] avgEase determined by sample size
+- [ ] maxes for graphs and grid determined by historical values
+- [ ] use actual runner photos
 - [ ] Server runs clustered?
-- [ ] Graphs play offscreen

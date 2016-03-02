@@ -5,13 +5,13 @@
 - [ ] graph signals in provided canvas
 - [ ] graph all data in the background?
  */
-TimeSeries = function(canvas, sampler) {
+TimeSeries = function(canvas, sampler, avgEase) {
   var cw = canvas.width;
   var ch = canvas.height;
   var ctx = canvas.getContext('2d');
-  var avgEase = .01;
+  avgEase = avgEase || .01;
 
-  setInterval(redraw, 5000);
+  // setInterval(redraw, 5000);
   redraw();
 
   function redraw() {
@@ -41,7 +41,7 @@ TimeSeries = function(canvas, sampler) {
     }, {
       lastAvg: 0,
       hscale: {dmn: minTime, dmx: maxTime, rmn: 0, rmx: cw},
-      vscale: {dmn: 0, dmx: 4, rmn: ch, rmx: 0},
+      vscale: {dmn: 0, dmx: 12, rmn: ch, rmx: 0},
       fillStyle: gradient1,
       lineWidth: 2,
       strokeStyle: 'rgba(60, 60, 60, 1.0)'
@@ -64,7 +64,7 @@ TimeSeries = function(canvas, sampler) {
     }, {
       lastBandAvg: [0,0,0,0,0],
       hscale: {dmn: minTime, dmx: maxTime, rmn: 0, rmx: cw},
-      vscale: {dmn: -1, dmx: 3, rmn: ch, rmx: 0},
+      vscale: {dmn: -1, dmx: 5, rmn: ch, rmx: 0},
       fillStyle: focusGradient,
       lineWidth: 2,
       strokeStyle: 'rgba(60, 60, 60, 1)'
