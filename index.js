@@ -14,7 +14,7 @@ var HISTORY_TIME_RANGE = 1800; // 30 minutes
 
 var app = express();
 
-var connections = [];
+var connections = {};
 
 app.use(function(req, res, next){
   req.pipe(concat(function(data){
@@ -63,7 +63,10 @@ app.post('/api/1.0/samples/:device/:session', function(req, res) {
 
   var message = JSON.stringify({device:req.params.device, lat:lat, lon:lon,
     data:Array.prototype.slice.call(samples)});
-  connections.forEach(function(connection) { connection.send(message); });
+  var deviceListeners = connections[req.params.device];
+  if (deviceListeners)
+    deviceListeners.forEach(function(socket) {
+      socket.send(message); });
 
   res.sendStatus(200);
 })
@@ -81,18 +84,33 @@ function toArray(params) {
   return Array.isArray(params) ? params : [params];
 }
 
+/////////////////////// SOCKETS ///////////////////////
+
+var socketHandlers = {
+  connect: function(connection, message) {
+    if (message.devices) {
+      message.devices.forEach(function(id) {
+        (connections[id] = connections[id]||[]).push(connection);
+      })
+    }
+  }
+}
+
 wss.on('connection', function connection(ws) {
 
-  connections.push(ws);
-
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+  ws.on('message', function incoming(messageJSON) {
+    var message = JSON.parse(messageJSON);
+    if (socketHandlers[message.type])
+      socketHandlers[message.type](ws, message);
+    console.log('received: ', message);
   });
 
   ws.on('close', function() {
-    var index = connections.indexOf(ws);
-    console.log('Close index', index, !~index)
-    if (~index) connections.splice(index,1);
+    for (var device in connections) {
+      var index = connections[device].indexOf(ws);
+      console.log('Close index', device, index, !~index)
+      if (~index) connections[device].splice(index,1);
+    }
   })
 
   ws.send(JSON.stringify(200));

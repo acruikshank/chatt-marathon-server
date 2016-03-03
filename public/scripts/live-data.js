@@ -1,4 +1,4 @@
-LiveData = function(ready) {
+LiveData = function(devices, ready) {
   var DELAY = 7500;
   var SAMPLE_SIZE = 26;
   var out = {};
@@ -27,6 +27,10 @@ LiveData = function(ready) {
     var ws = new WebSocket(protocol+location.host);
     ws.binaryType = 'arraybuffer';
     ws.addEventListener('message',  handleSamples);
+    ws.addEventListener('open', function() {
+      ws.send(JSON.stringify({type:'connect', devices:devices}))
+    })
+
 
     if (cb) cb();
     // TODO: on close reload, ping timer
@@ -66,7 +70,8 @@ LiveData = function(ready) {
 
   function fetchData(uploadComplete) {
     var request = new XMLHttpRequest();
-    request.open("GET", '/api/1.0/samples?device_ids=596849CA', true);
+    var deviceIds = devices.map(function(d){return 'device_ids='+encodeURIComponent(d)}).join('&');
+    request.open("GET", '/api/1.0/samples?'+deviceIds, true);
 
     request.onreadystatechange = function() {
       if (request.readyState > 3) {
