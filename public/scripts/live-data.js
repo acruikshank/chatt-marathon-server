@@ -53,14 +53,26 @@ LiveData = function(devices, ready) {
     }
   }
 
-  out.getSample = function getSample() {
-    if (!current) return {sample:new Float32Array(25)};
+  function currentSample() {
+    if (!current) return null;
 
     out.currentTime = new Date();
     while (current.next && (out.currentTime.getTime() - DELAY > current.next.time.getTime()))
       current = current.next;
 
+    return current;
+  }
+
+  out.getSample = function getSample() {
+    var current = currentSample();
+    if (!current) return {sample:new Float32Array(25)};
     return new Float32Array(current.sample);
+  }
+
+  out.getLocation = function getSample() {
+    var current = currentSample();
+    if (!current) return {lat:0, lon:0};
+    return {lat:current.lat, lon:current.lon};
   }
 
   out.historyBuffer = function() {
