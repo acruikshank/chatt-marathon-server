@@ -1,4 +1,4 @@
-RecordedData = function(file, playbackRate, cb) {
+RecordedData = function(file, playbackRate, cb, listener) {
   playbackRate = playbackRate || 1.0;
   var times, data;
   var currentTime;
@@ -58,7 +58,13 @@ RecordedData = function(file, playbackRate, cb) {
 
     var sample = new Float32Array(data.length);
     for (var i=0; i<data.length; i++) sample[i] = data[i][index];
+    if (listener)
+      listener({time:new Date(currentTime), sample:sample})
     return sample;
+  }
+
+  out.getLocation = function getSample() {
+    return {lat: 35.0537, lon: -85.311};
   }
 
   out.sampleAt = function sampleAt(time, start, end) {
@@ -77,6 +83,10 @@ RecordedData = function(file, playbackRate, cb) {
 
   out.historyBuffer = function() {
     return out.buffer;
+  }
+
+  out.setListener = function(l) {
+    listener = l;
   }
 
   fetchData();

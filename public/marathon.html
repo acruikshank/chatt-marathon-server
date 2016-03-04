@@ -34,14 +34,14 @@
         position: absolute;
         top:0;
         left:0;
-        width: 40%;
+        width: 50%;
         height: 100%;
       }
       #time-series2 {
         position: absolute;
         top:0;
         right:0;
-        width: 40%;
+        width: 50%;
         height: 100%;
       }
     </style>
@@ -76,7 +76,7 @@
         vec2 center = size*offset;
         vec2 offset = gl_FragCoord.xy - center;
         float angle = atan(offset.y, offset.x);
-        float norm = 2.0*length(offset);
+        float norm = 1.3*length(offset);
 
         vec4 angleOffset = diagonals - angle;
         vec4 aShape = exp(-angleOffset*angleOffset*6.0);
@@ -127,72 +127,70 @@
     </canvas>
   </body>
   <script>
-  var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
 
-  var canvas1 = document.getElementById('grid1');
-  canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
-  canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
-  Grid(canvas1, sampler1, .5, .5);
+  runLive();
+  // runRecorded();
 
-  var sampler2 = RecordedData('data/run-20160206-04_45.csv', 10, startTimeSeries2);
-  var canvas2 = document.getElementById('grid2');
-  canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
-  canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
-  Grid(canvas2, sampler2, .5, .5);
+  function runRecorded() {
+    var sampler1 = RecordedData('data/run-20160124-11_21.csv', 1);
+    var sampler2 = RecordedData('data/run-20160206-04_45.csv', 1);
 
-  function startTimeSeries1() {
+    var canvas1 = document.getElementById('grid1');
+    canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
+    canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
+    Grid(canvas1, sampler1, .5, .5);
+
+    var canvas2 = document.getElementById('grid2');
+    canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
+    canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
+    Grid(canvas2, sampler2, .5, .5);
+
     var timeSeries1 = document.getElementById('time-series1');
     timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
     timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
     TimeSeries(timeSeries1, sampler1, .001);
-  }
 
-  function startTimeSeries2() {
     var timeSeries2 = document.getElementById('time-series2');
     timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
     timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
     TimeSeries(timeSeries2, sampler2, .005);
+
+    window.onload = function() {
+      var locationCanvas = document.getElementById('location');
+      locationCanvas.width = locationCanvas.offsetWidth * (window.devicePixelRatio||1);
+      locationCanvas.height = locationCanvas.offsetHeight * (window.devicePixelRatio||1);
+      Location(locationCanvas, sampler1, sampler2);
+    }
   }
 
 
-    // // var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
-    // startTimeSeries1();
-    //
-    //
-    // // var sampler2 = RecordedData('data/run-20160206-04_45.csv', 10, startTimeSeries2);
-    // // var canvas2 = document.getElementById('grid2');
-    // // canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
-    // // canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
-    // // Grid(canvas2, sampler2, .5, .5);
-    // //
+  function runLive() {
+    var ericSampler = LiveData(['596849CA'], graphLeft);
 
-/*
-    var ericSampler = LiveData(['596849CA'],graphLeft);
+    var timeSeries1 = document.getElementById('time-series1');
+    timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries1, ericSampler);
 
     function graphLeft() {
       var canvas1 = document.getElementById('grid1');
       canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
       canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
       Grid(canvas1, ericSampler, .5, .5);
-
-      var timeSeries1 = document.getElementById('time-series1');
-      timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
-      timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
-      TimeSeries(timeSeries1, ericSampler);
     }
 
     var kelseySampler = LiveData(['59683FD7'],graphRight);
+
+    var timeSeries = document.getElementById('time-series2');
+    timeSeries.width = timeSeries.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries.height = timeSeries.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries, kelseySampler);
 
     function graphRight() {
       var canvas = document.getElementById('grid2');
       canvas.width = canvas.offsetWidth * (window.devicePixelRatio||1);
       canvas.height = canvas.offsetHeight * (window.devicePixelRatio||1);
       Grid(canvas, kelseySampler, .5, .5);
-
-      var timeSeries = document.getElementById('time-series2');
-      timeSeries.width = timeSeries.offsetWidth * (window.devicePixelRatio||1);
-      timeSeries.height = timeSeries.offsetHeight * (window.devicePixelRatio||1);
-      TimeSeries(timeSeries, kelseySampler);
     }
 
     window.onload = function() {
@@ -201,13 +199,6 @@
       locationCanvas.height = locationCanvas.offsetHeight * (window.devicePixelRatio||1);
       Location(locationCanvas, ericSampler, kelseySampler);
     }
-*/
-
-    // function startTimeSeries2() {
-    //   var timeSeries2 = document.getElementById('time-series2');
-    //   timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
-    //   timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
-    //   TimeSeries(timeSeries2, sampler2);
-    // }
+  }
   </script>
 </html>

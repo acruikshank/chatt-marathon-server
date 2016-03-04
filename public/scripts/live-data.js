@@ -1,4 +1,4 @@
-LiveData = function(devices, ready) {
+LiveData = function(devices, ready, listener) {
   var DELAY = 7500;
   var SAMPLE_SIZE = 26;
   var out = {};
@@ -15,6 +15,8 @@ LiveData = function(devices, ready) {
         time: new Date(data.time),
         sample: data.sample
       }
+      if (listener)
+        listener(sample);
       if (tail) tail.next = tail = sample;
       else head = tail = sample;
     }
@@ -46,6 +48,8 @@ LiveData = function(devices, ready) {
         time: new Date(msg.data[i]*1000),
         sample: msg.data.slice(i+1,i+SAMPLE_SIZE)
       }
+      if (listener)
+        listener(sample);
       if (!current)
         current = tail = sample;
       else if (tail.time < sample.time)
@@ -73,6 +77,10 @@ LiveData = function(devices, ready) {
     var current = currentSample();
     if (!current) return {lat:0, lon:0};
     return {lat:current.lat, lon:current.lon};
+  }
+
+  out.setListener = function setListener(l) {
+    listener = l;
   }
 
   out.historyBuffer = function() {
