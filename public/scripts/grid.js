@@ -5,8 +5,10 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
   var gridBuffer;
   var dTheta = 1;
   var theta = 0;
-  var ease = .05;
+  var ease = .02;
   var lastSample = new Float32Array(25);
+  var weightEase = .0001;
+  var lastWeight = 1000;
 
   start()
 
@@ -41,15 +43,23 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
     gl.uniform4f(diagonalsUniform, -Math.PI*1/4, -Math.PI*3/4, Math.PI*1/4, Math.PI*3/4);
 
     var sample = sampler.getSample();
-    for (var j=0; j<sample.length; j++)
+    var maxWeight = 0;
+    for (var j=0; j<sample.length; j++) {
       sample[j] = lerp(lastSample[j],sample[j],ease);
+      maxWeight = Math.max(maxWeight, sample[j]);
+    }
     lastSample = sample;
+    lastWeight = lerp(lastWeight, maxWeight, weightEase);
+
+    var weightUniform = gl.getUniformLocation(gridShader, "weight");
+    gl.uniform1f(weightUniform, 2.0 / lastWeight);
 
     var samplesUniform = gl.getUniformLocation(gridShader, "samples");
     gl.uniform1fv(samplesUniform, sample);
 
     var offsetUniform = gl.getUniformLocation(gridShader, "offset");
     gl.uniform2f(offsetUniform, xOffset, yOffset);
+
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

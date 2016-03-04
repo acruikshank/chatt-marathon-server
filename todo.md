@@ -10,9 +10,9 @@ TODO
 - [x] Have recorded data come from database
 - [x] Client can distinguish between device data and visualize both simultaneously.
 - [x] use actual runner photos
-- [ ] Worker to render graphs on different core
+- [x] Worker to render graphs on different core
 - [ ] maxes for graphs and grid determined by historical values
-- [ ] avgEase determined by sample size
+- [x] avgEase determined by sample size
 - [ ] Client can ping server through websocket
 - [ ] Client reconnects with backoff?
 - [ ] Server and Client sync clocks on initial ws connection

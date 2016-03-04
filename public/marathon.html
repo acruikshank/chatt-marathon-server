@@ -11,16 +11,17 @@
 
       .runner { top: 0; position:absolute; width: 60vh; height: 100vh; padding: 1% 4%; }
       #runner1 { left:0; text-align: right; }
-      #runner1 img { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .25;}
+      #runner1 img { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .2;}
       #runner2 { right:0; text-align: left; }
-      #runner2 img { position: absolute; top: 0%; height: 100%; right: -35%; opacity: .3;}
-      .runner h2 { font-size: 10vh; position: absolute; top: -4%; right: 4%; color: #666; }
-      #runner2.runner h2 { left: 2%; }
+      #runner2 img { position: absolute; top: 0%; height: 100%; right: -35%; opacity: .2;}
+      .runner h2 { font-size: 8vh; position: absolute; top: -4%; right: 10%; color: #666; }
+      #runner2.runner h2 { left: 10%; }
 
       body {
         background-color: #faf4e4;
+        background: linear-gradient(to bottom, #e0d5c0 0%,#faf4ef 100%);
       }
-      .map { position: absolute; left: 50%; top: 20%; width: 20%; margin-left: -10%; }
+      .map { position: absolute; left: 50%; bottom: 10%; width: 18%; margin-left: -10%; }
       #map-background { width: 100%; opacity: .6;}
       #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
       #graphs {
@@ -72,12 +73,14 @@
       uniform vec4 diagonals;
       uniform float samples[25];
       uniform vec2 offset;
+      uniform float weight;
 
       void main(void) {
-        vec2 center = size*offset;
-        vec2 offset = gl_FragCoord.xy - center;
+        vec2 effectiveSize = vec2(1400.0);
+        vec2 center = effectiveSize*offset;
+        vec2 offset = effectiveSize*gl_FragCoord.xy/size.x - center;
         float angle = atan(offset.y, offset.x);
-        float norm = 1.3*length(offset);
+        float norm = length(offset);
 
         vec4 angleOffset = diagonals - angle;
         vec4 aShape = exp(-angleOffset*angleOffset*6.0);
@@ -90,12 +93,12 @@
         // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
 
         float distort = 1.0 + norm * 0.01;
-        float shape = rShape * dot(aShape,0.0006*signal) + cShape * 0.0004*samples[20];
-        vec2 mapCoord = center + offset * mix(1.0,.6 + .35*sin(norm*.06 + .1*theta),shape);
-        vec2 coord = sin(.2 *mapCoord);
-        float alpha = 50.0*(max(0.0,max(coord.x, coord.y))-.98 + .01*shape);
+        float shape = rShape * dot(aShape,1.5*weight*signal) + cShape * weight*samples[20];
+        vec2 mapCoord = offset * mix(1.0,.6 + .35*sin(norm*.03 + .1*theta),shape);
+        vec2 coord = sin(0.15 *mapCoord);
+        float alpha = 50.0*(max(0.0,max(coord.x, coord.y))-1.0 + .04*shape);
         // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
-        vec3 color = mix(vec3(0.4,0.4,0.4), vec3(1.0,0.2,0.2), clamp(10.0*shape,0.0,1.0));
+        vec3 color = mix(vec3(0.4,0.48,0.4), vec3(0.3,0.45,0.5), clamp(4.0*shape,0.0,1.5));
         gl_FragColor = vec4(color, alpha);
       }
     </script>
@@ -129,8 +132,12 @@
   </body>
   <script>
 
-  runLive();
-  // runRecorded();
+  /*
+    Eric - 59683FD7, 59684147
+    Kelsey - 59684800
+   */
+  // runLive();
+  runRecorded();
 
   function runRecorded() {
     var sampler1 = RecordedData('data/run-20160124-11_21.csv', 1);
@@ -139,12 +146,12 @@
     var canvas1 = document.getElementById('grid1');
     canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
     canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
-    Grid(canvas1, sampler1, .5, .5);
+    Grid(canvas1, sampler1, .5, .7);
 
     var canvas2 = document.getElementById('grid2');
     canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
     canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
-    Grid(canvas2, sampler2, .5, .5);
+    Grid(canvas2, sampler2, .5, .7);
 
     var timeSeries1 = document.getElementById('time-series1');
     timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
@@ -166,7 +173,8 @@
 
 
   function runLive() {
-    var ericSampler = LiveData(['596849CA'], graphLeft);
+    var ericSampler = LiveData(['59683FD7','59684147'], graphLeft);
+    var kelseySampler = LiveData(['59684800'],graphRight);
 
     var timeSeries1 = document.getElementById('time-series1');
     timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
@@ -179,8 +187,6 @@
       canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
       Grid(canvas1, ericSampler, .5, .5);
     }
-
-    var kelseySampler = LiveData(['59683FD7'],graphRight);
 
     var timeSeries = document.getElementById('time-series2');
     timeSeries.width = timeSeries.offsetWidth * (window.devicePixelRatio||1);
