@@ -27,8 +27,9 @@ TimeSeries = function(canvas, sampler, avgEase) {
 
     var maxValue = Math.max(computed.maxActivity, computed.maxFocus);
     maxValue = Math.max(maxValue, computed.maxExcitement)
+    if (maxValue < .000001) return;
+
     var scale = .98 * ch / maxValue;
-    console.log(computed.maxActivity)
 
     // activity
     var gradient1 = ctx.createLinearGradient(0,0,0,ch);
@@ -55,7 +56,7 @@ TimeSeries = function(canvas, sampler, avgEase) {
 
     // excitement
     var excitementGradient = ctx.createLinearGradient(0,0,0,ch);
-    excitementGradient.addColorStop(1-(computed.maxFocus / maxValue),'rgba(167, 39, 62, 1)');
+    excitementGradient.addColorStop(1-(computed.maxExcitement / maxValue),'rgba(167, 39, 62, 1)');
     excitementGradient.addColorStop(1 - .3 * (computed.maxExcitement / maxValue),'rgba(213, 57, 7, 0.6)');
     excitementGradient.addColorStop(1,'rgba(203, 184, 91, .2)');
 

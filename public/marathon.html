@@ -14,7 +14,8 @@
       #runner1 img { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .25;}
       #runner2 { right:0; text-align: left; }
       #runner2 img { position: absolute; top: 0%; height: 100%; right: -35%; opacity: .3;}
-      h2 { font-size: 5vh; position: relative; padding: 8% 16%; }
+      .runner h2 { font-size: 10vh; position: absolute; top: -4%; right: 4%; color: #666; }
+      #runner2.runner h2 { left: 2%; }
 
       body {
         background-color: #faf4e4;
@@ -117,7 +118,7 @@
       Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
     </canvas>
     <div class="map">
-      <img src="map.png" id="map-background"/>
+      <img src="map-detailed.png" id="map-background"/>
       <canvas id="location"></canvas>
     </div>
     <div id="graphs">

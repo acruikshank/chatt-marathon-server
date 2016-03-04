@@ -21,21 +21,25 @@ Location = function(canvas, sampler1, sampler2) {
     ctx.clearRect(0,0,cw,ch);
 
     if (location1) {
-      var x = (X_SLOPE*location1.lon + X_INTERCEPT) * X_SCALE;
-      var y = (Y_SLOPE*location1.lat + Y_INTERCEPT) * Y_SCALE;
+      var x = (X_SLOPE*location1.lon + X_INTERCEPT) * X_SCALE * .929 + 31;
+      var y = (Y_SLOPE*location1.lat + Y_INTERCEPT) * Y_SCALE * .929 + 21;
 
-      ctx.strokeStyle = 'rgba(0,100,255,1)';
-      ctx.fillStyle = 'rgba(255,255,0,.75)';
+      ctx.fillStyle = ctx.strokeStyle = 'rgba(0,100,255,1)';
+      // ctx.fillStyle = 'rgba(255,255,255,.75)';
       ctx.beginPath();
-      ctx.arc(x,y,2+15*Math.pow(Math.cos(theta+Math.PI/2),2),0,2*Math.PI,true);
-      ctx.lineWidth = 5+5*Math.pow(Math.cos(theta),2);
+      ctx.arc(x,y,10,0,2*Math.PI,true);
       ctx.fill();
+      // ctx.lineWidth = 5+5*Math.pow(Math.cos(theta),2);
+      ctx.beginPath();
+      ctx.arc(x,y,20,theta,Math.PI +theta,true);
+      ctx.lineCap = 'round';
+      ctx.lineWidth = 10;
       ctx.stroke();
     }
 
     if (location2) {
-      var x = (X_SLOPE*location2.lon + X_INTERCEPT) * X_SCALE;
-      var y = (Y_SLOPE*location2.lat + Y_INTERCEPT) * Y_SCALE;
+      var x = (X_SLOPE*location2.lon + X_INTERCEPT) * X_SCALE * .929 + 31;
+      var y = (Y_SLOPE*location2.lat + Y_INTERCEPT) * Y_SCALE * .929 + 21;
 
       ctx.strokeStyle = 'rgba(237, 69, 165, 1)';
       ctx.fillStyle = 'rgba(65, 128, 224, 0.5)';
