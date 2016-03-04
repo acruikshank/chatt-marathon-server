@@ -5,15 +5,15 @@
     <link href='https://fonts.googleapis.com/css?family=Dosis:600' rel='stylesheet' type='text/css'>
     <style type="text/css">
       html, body { margin:0; width: 100%; height:100%; overflow: hidden; font-family: 'Dosis', sans-serif; }
-      .grid { top: 28%; position:absolute; width: 50vw; height: 50vh;  }
+      .grid { top: 0%; position:absolute; width: 50vw; height: 100vh;  }
       #grid1 { left:0; }
       #grid2 { right:0; }
 
       .runner { top: 0; position:absolute; width: 60vh; height: 100vh; padding: 1% 4%; }
       #runner1 { left:0; text-align: right; }
-      #runner1 img { position: absolute; top: -2%; height: 120%; left: -40%; opacity: .3;}
+      #runner1 img { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .25;}
       #runner2 { right:0; text-align: left; }
-      #runner2 img { position: absolute; top: 0; height: 110%; right: -20%; opacity: .3;}
+      #runner2 img { position: absolute; top: 0%; height: 100%; right: -35%; opacity: .3;}
       h2 { font-size: 5vh; position: relative; padding: 8% 16%; }
 
       body {
@@ -76,7 +76,7 @@
         vec2 center = size*offset;
         vec2 offset = gl_FragCoord.xy - center;
         float angle = atan(offset.y, offset.x);
-        float norm = length(offset);
+        float norm = 2.0*length(offset);
 
         vec4 angleOffset = diagonals - angle;
         vec4 aShape = exp(-angleOffset*angleOffset*6.0);
@@ -103,11 +103,11 @@
 
   <body>
     <div id="runner1" class="runner">
-      <img src="oquidilly.png"/>
+      <img src="eric.png"/>
       <h2>ERIC</h2>
     </div>
     <div id="runner2" class="runner">
-      <img src="mary.png"/>
+      <img src="kelsey.png"/>
       <h2>KELSEY</h2>
     </div>
     <canvas id="grid1" class="grid">
@@ -127,32 +127,32 @@
     </canvas>
   </body>
   <script>
-  // var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
-  //
-  // var canvas1 = document.getElementById('grid1');
-  // canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
-  // canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
-  // Grid(canvas1, sampler1, .5, .5);
+  var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
 
-  // var sampler2 = RecordedData('data/run-20160206-04_45.csv', 10, startTimeSeries2);
-  // var canvas2 = document.getElementById('grid2');
-  // canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
-  // canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
-  // Grid(canvas2, sampler2, .5, .5);
+  var canvas1 = document.getElementById('grid1');
+  canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
+  canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
+  Grid(canvas1, sampler1, .5, .5);
 
-  // function startTimeSeries1() {
-  //   var timeSeries1 = document.getElementById('time-series1');
-  //   timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
-  //   timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
-  //   TimeSeries(timeSeries1, sampler1, .001);
-  // }
+  var sampler2 = RecordedData('data/run-20160206-04_45.csv', 10, startTimeSeries2);
+  var canvas2 = document.getElementById('grid2');
+  canvas2.width = canvas2.offsetWidth * (window.devicePixelRatio||1);
+  canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
+  Grid(canvas2, sampler2, .5, .5);
 
-  // function startTimeSeries2() {
-  //   var timeSeries2 = document.getElementById('time-series2');
-  //   timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
-  //   timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
-  //   TimeSeries(timeSeries2, sampler2, .005);
-  // }
+  function startTimeSeries1() {
+    var timeSeries1 = document.getElementById('time-series1');
+    timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries1, sampler1, .001);
+  }
+
+  function startTimeSeries2() {
+    var timeSeries2 = document.getElementById('time-series2');
+    timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries2, sampler2, .005);
+  }
 
 
     // // var sampler1 = RecordedData('data/run-20160124-11_21.csv', 10, startTimeSeries1);
@@ -165,6 +165,8 @@
     // // canvas2.height = canvas2.offsetHeight * (window.devicePixelRatio||1);
     // // Grid(canvas2, sampler2, .5, .5);
     // //
+
+/*
     var ericSampler = LiveData(['596849CA'],graphLeft);
 
     function graphLeft() {
@@ -199,6 +201,7 @@
       locationCanvas.height = locationCanvas.offsetHeight * (window.devicePixelRatio||1);
       Location(locationCanvas, ericSampler, kelseySampler);
     }
+*/
 
     // function startTimeSeries2() {
     //   var timeSeries2 = document.getElementById('time-series2');

@@ -8,12 +8,11 @@ TODO
 - [x] Save location data to database and transmit it with sample data
 - [x] Server can catch up client with processed data.
 - [x] Have recorded data come from database
-- [ ] Server and Client sync clocks on initial ws connection
-- [ ] Client can distinguish between device data and visualize both simultaneously.
+- [x] Client can distinguish between device data and visualize both simultaneously.
+- [x] use actual runner photos
+- [ ] Worker to render graphs on different core
+- [ ] maxes for graphs and grid determined by historical values
+- [ ] avgEase determined by sample size
 - [ ] Client can ping server through websocket
 - [ ] Client reconnects with backoff?
-- [ ] Worker to render graphs on different core
-- [ ] avgEase determined by sample size
-- [ ] maxes for graphs and grid determined by historical values
-- [ ] use actual runner photos
-- [ ] Server runs clustered?
+- [ ] Server and Client sync clocks on initial ws connection
