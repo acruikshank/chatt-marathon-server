@@ -81,10 +81,6 @@ RecordedData = function(file, playbackRate, cb, listener) {
       : sampleAt(time, midpoint, end)
   }
 
-  out.historyBuffer = function() {
-    return out.buffer;
-  }
-
   out.setListener = function(l) {
     listener = l;
   }

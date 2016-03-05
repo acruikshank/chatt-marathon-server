@@ -7,8 +7,8 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
   var theta = 0;
   var ease = .02;
   var lastSample = new Float32Array(25);
-  var weightEase = .0001;
-  var lastWeight = 1000;
+  var weightEase = .001;
+  var lastWeight = 100;
 
   start()
 
@@ -52,7 +52,7 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
     lastWeight = lerp(lastWeight, maxWeight, weightEase);
 
     var weightUniform = gl.getUniformLocation(gridShader, "weight");
-    gl.uniform1f(weightUniform, 2.0 / lastWeight);
+    gl.uniform1f(weightUniform, 4.0 / lastWeight);
 
     var samplesUniform = gl.getUniformLocation(gridShader, "samples");
     gl.uniform1fv(samplesUniform, sample);

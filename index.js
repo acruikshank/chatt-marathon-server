@@ -93,6 +93,9 @@ var socketHandlers = {
         (connections[id] = connections[id]||[]).push(connection);
       })
     }
+  },
+  ping: function(connection) {
+    connection.send('pong');
   }
 }
 

@@ -2,12 +2,14 @@ LiveData = function(devices, ready, listener) {
   var DELAY = 7500;
   var SAMPLE_SIZE = 26;
   var out = {};
-  var head, current, tail;
+  var current, tail;
+  var connection;
 
   fetchData(parseData);
 
   function parseData(samplesJSON) {
     var samples = JSON.parse(samplesJSON);
+    var currenTime = new Date();
     for (var i=0, data; data = samples[i]; i++) {
       var sample = {
         lat: data.lat,
@@ -18,28 +20,18 @@ LiveData = function(devices, ready, listener) {
       if (listener)
         listener(sample);
       if (tail) tail.next = tail = sample;
-      else head = tail = sample;
+      else tail = sample;
+      if (tail.time < new Date())
+        current = tail;
     }
-    current = tail;
-    startWebsocket(ready);
-  }
 
-  function startWebsocket(cb) {
-    var protocol = location.protocol.replace('http','ws');
-    var ws = new WebSocket(protocol+location.host);
-    ws.binaryType = 'arraybuffer';
-    ws.addEventListener('message',  handleSamples);
-    ws.addEventListener('open', function() {
-      ws.send(JSON.stringify({type:'connect', devices:devices}))
-    })
+    connection = Connection(handleSamples);
 
-
-    if (cb) cb();
-    // TODO: on close reload, ping timer
+    if (ready) ready();
   }
 
   function handleSamples(json) {
-    var msg = JSON.parse(json.data);
+    var msg = JSON.parse(json);
     if (!msg.data) return;
     for (var i=0; i<msg.data.length; i+=SAMPLE_SIZE) {
       var sample = {
@@ -69,7 +61,7 @@ LiveData = function(devices, ready, listener) {
 
   out.getSample = function getSample() {
     var current = currentSample();
-    if (!current) return {sample:new Float32Array(25)};
+    if (!current) return new Float32Array(25);
     return new Float32Array(current.sample);
   }
 
@@ -81,11 +73,6 @@ LiveData = function(devices, ready, listener) {
 
   out.setListener = function setListener(l) {
     listener = l;
-  }
-
-  out.historyBuffer = function() {
-    // TODO: prune out-of-date samples from buffer here
-    return head;
   }
 
   function fetchData(uploadComplete) {
@@ -102,6 +89,69 @@ LiveData = function(devices, ready, listener) {
       }
     }
     request.send();
+  }
+
+  function Connection(handlerSamples) {
+    var PING_DELAY = 10000;
+    var DISCONNECT_DELAY = 30000;
+    var state = 'disconnected';
+    var lastStateChange = new Date();
+    var ws;
+
+    function connect() {
+      var protocol = location.protocol.replace('http','ws');
+      ws = new WebSocket(protocol+location.host);
+      ws.binaryType = 'arraybuffer';
+      ws.addEventListener('message',  onMessage);
+      ws.addEventListener('open', function() {
+        ws.send(JSON.stringify({type:'connect', devices:devices}))
+        setState('connected');
+      })
+      ws.addEventListener('close', function() {
+        setState('disconnected');
+      })
+    }
+
+    function setState(s) {
+      state = s
+      lastStateChange = new Date()
+    }
+
+    function onMessage(e) {
+      if (e.data !== 'pong')
+        handleSamples(e.data)
+      setState('connected')
+    }
+
+    function checkState() {
+      var timeSinceStateChange = new Date().getTime() - lastStateChange.getTime();
+      switch (state) {
+        case 'connected':
+          if (timeSinceStateChange > PING_DELAY)
+            ping();
+          break;
+        case 'pinging':
+        case 'disconnected':
+          if (timeSinceStateChange > DISCONNECT_DELAY)
+            reconnect();
+          break;
+      }
+    }
+
+    function ping() {
+      setState('pinging');
+      ws.send(JSON.stringify({type:'ping'}));
+    }
+
+    function reconnect() {
+      setState('disconnected');
+      if (ws) ws.close();
+      connect();
+    }
+
+    setInterval(checkState, 1000);
+
+    connect();
   }
 
   return out;
