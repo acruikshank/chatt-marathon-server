@@ -14,7 +14,7 @@
       #runner1 img { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .2;}
       #runner2 { right:0; text-align: left; }
       #runner2 img { position: absolute; top: -15%; height: 115%; right: -40%; opacity: .2;}
-      .runner h2 { font-size: 5vh; position: absolute; top: 6%; right: 24%; color: #666; }
+      .runner h2 { font-size: 5vh; position: absolute; top: 6%; right: 24%; color: rgba(100,100,100,.9); }
       #runner2.runner h2 { left: 14%; }
       .runner h2 .color {
         display: inline-block;
@@ -196,10 +196,10 @@
    */
   var ericSampler, kelseySampler;
 
-  ericSampler = RecordedData('data/run-20160124-11_21.csv', 1, graphLeft);
+  // ericSampler = RecordedData('data/run-20160124-11_21.csv', 1, graphLeft);
   // kelseySampler = RecordedData('data/run-20160206-04_45.csv', 1, graphRight);
 
-  // ericSampler = LiveData(['59683FD7','59684147','596849CA'], graphLeft);
+  ericSampler = LiveData(['59683FD7','59684147','596849CA'], graphLeft);
   kelseySampler = LiveData(['59684800','596849CA'],graphRight);
 
   var timeSeries1 = document.getElementById('time-series1');
