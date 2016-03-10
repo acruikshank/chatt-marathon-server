@@ -12,6 +12,7 @@
     "JSONStream": "^1.0.7",
     "binary": "^0.3.0",
     "concat-stream": "^1.5.1",
+    "dateformat": "^1.0.12",
     "dotenv": "^2.0.0",
     "event-stream": "^3.3.2",
     "express": "^4.13.3",

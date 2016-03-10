@@ -79,6 +79,14 @@ app.get('/api/1.0/samples', function(req, res) {
   })
 })
 
+app.get('/api/1.0/history', function(req, res) {
+  var deviceIds = toArray(req.query.device_ids)
+  db.historySampleStream(deviceIds, req.query.start, req.query.end, function(err, resultStream) {
+    if (err) return res.send(err);
+    resultStream.pipe(JSONStream.stringify()).pipe(res)
+  })
+})
+
 function toArray(params) {
   if (params == null) return []
   return Array.isArray(params) ? params : [params];

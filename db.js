@@ -1,6 +1,7 @@
 var pg = require('pg')
 var QueryStream = require('pg-query-stream')
 var es = require('event-stream');
+var dateformat = require('dateformat');
 
 var SIGNAL_COLUMNS = exports.SIGNAL_COLUMNS = [
   'theta_af3','alpha_af3','low_beta_af3','high_beta_af3','gamma_af3',
@@ -26,17 +27,36 @@ exports.saveSample = function saveSample(deviceId, time, lat, lon, data) {
 }
 
 exports.latestSampleStream = function latestSampleStream(range, deviceIds, cb) {
+  // var since = "timestamp '2016-02-28 18:37:29.44'"
+  var since = 'NOW()'
+  var sql = "select device_id, time, lat, lon,"
+    + SIGNAL_COLUMNS.join(',')
+    + " from emote_samples where time + ($1 || ' second')::interval > "+since
+    +" and device_id in (" + parameters(deviceIds, 2) + ") order by time";
+  sampleStream(new QueryStream(sql, [range].concat(deviceIds)), cb);
+}
+
+
+exports.historySampleStream = function latestSampleStream(deviceIds, start, end, cb) {
+  var since = "timestamptz '"+dateformat(new Date(start),'yyyy-mm-dd HH:MM:ss Z')+"'"
+  var until = end
+    ? "timestamptz '"+dateformat(new Date(end),'yyyy-mm-dd HH:MM:ss Z')+"'"
+    : 'NOW()'
+
+  var sql = "select device_id, time, lat, lon,"
+    + SIGNAL_COLUMNS.join(',')
+    + " from emote_samples where time >= " + since
+    + " and time < " + until
+    +" and device_id in (" + parameters(deviceIds, 1) + ") order by time";
+
+  sampleStream(new QueryStream(sql, deviceIds), cb);
+}
+
+function sampleStream(queryStream, cb) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     if (err) return cb(err);
 
-    // var since = "timestamp '2016-02-28 18:37:29.44'"
-    var since = 'NOW()'
-    var sql = "select device_id, time, lat, lon,"
-      + SIGNAL_COLUMNS.join(',')
-      + " from emote_samples where time + ($1 || ' second')::interval > "+since
-      +" and device_id in (" + parameters(deviceIds, 2) + ") order by time";
-
-    var stream = client.query(new QueryStream(sql, [range].concat(deviceIds)))
+    var stream = client.query(queryStream)
     stream.on('end', done)
     stream.on('error', function(err) {
       done()
