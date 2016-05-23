@@ -2,7 +2,7 @@ TimeSeries = function(canvas, sampler, avgEase) {
   var cw = canvas.width;
   var ch = canvas.height;
   var ctx = canvas.getContext('2d');
-  avgEase = avgEase || .01;
+  avgEase = avgEase || .5;
 
   // WORKER
   var worker = new Worker('scripts/time-series-worker.js');

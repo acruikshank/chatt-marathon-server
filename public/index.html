@@ -270,11 +270,11 @@
   // kelseySampler = LiveData(['59684800','596849CA'],graphRight);
 
   ericSampler = PlaybackData(['59683FD7','59684147','596849CA'],
-    new Date('2016-03-06 07:55:30 est'),
-    new Date('2016-03-06 012:10:00 est'), graphLeft);
+    new Date('2016/03/06 07:56:30 est'),
+    new Date('2016/03/06 010:35:00 est'), graphLeft);
   kelseySampler = PlaybackData(['59684800','596849CA'],
-    new Date('2016-03-06 07:55:30 est'),
-    new Date('2016-03-06 012:10:00 est'), graphRight);
+    new Date('2016/03/06 07:56:30 est'),
+    new Date('2016/03/06 012:10:00 est'), graphRight);
 
   var timeSeries1 = document.getElementById('time-series1');
   timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
@@ -284,7 +284,7 @@
   var timeSeries2 = document.getElementById('time-series2');
   timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
   timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
-  TimeSeries(timeSeries2, kelseySampler, .005);
+  TimeSeries(timeSeries2, kelseySampler, .001);
 
   window.onload = function() {
     var locationCanvas = document.getElementById('location');
