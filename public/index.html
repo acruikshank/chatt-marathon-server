@@ -266,8 +266,8 @@
   // ericSampler = RecordedData('data/run-20160124-11_21.csv', 1, graphLeft);
   // kelseySampler = RecordedData('data/run-20160206-04_45.csv', 1, graphRight);
 
-  // ericSampler = LiveData(['59683FD7','59684147','596849CA'], graphLeft);
-  // kelseySampler = LiveData(['59684800','596849CA'],graphRight);
+  // ericSampler = LiveData(['59683FD7','59684147','596849CA','5A68593D'], graphLeft);
+  // kelseySampler = LiveData(['59684800','596849CA','5A68590C'],graphRight);
 
   ericSampler = PlaybackData(['59683FD7','59684147','596849CA'],
     new Date('2016/03/06 07:56:30 est'),
@@ -275,6 +275,10 @@
   kelseySampler = PlaybackData(['59684800','596849CA'],
     new Date('2016/03/06 07:56:30 est'),
     new Date('2016/03/06 012:10:00 est'), graphRight);
+
+  // ericSampler = PlaybackData(['5A68593D'],
+  //   new Date('2017/02/12 11:30:00 est'),
+  //   new Date('2017/02/12 11:40:00 est'), graphLeft);
 
   var timeSeries1 = document.getElementById('time-series1');
   timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);

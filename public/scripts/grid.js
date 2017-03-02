@@ -1,4 +1,4 @@
-Grid = function grid(canvas, sampler, xOffset, yOffset) {
+Grid = function grid(canvas, sampler, xOffset, yOffset, disabled) {
   var gl;
   var gridShader;
   var coordAttribute;
@@ -23,8 +23,17 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
 
       gridShader = SketchbookUtil.createProgram(gl, 'flat', 'grid');
 
-      render();
+      if (!disabled) render();
     }
+  }
+
+  function enable() {
+    disabled = false;
+    render();
+  }
+
+  function disable() {
+    disabled = true;
   }
 
   function render() {
@@ -65,8 +74,10 @@ Grid = function grid(canvas, sampler, xOffset, yOffset) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     SketchbookUtil.drawFlatBackground(gl, gridShader);
 
-      requestAnimationFrame(render);
+    if (!disabled) requestAnimationFrame(render);
   }
 
   function lerp(a,b,x) { return a + x*(b-a); }
+
+  return {enable:enable, disable:disable};
 }

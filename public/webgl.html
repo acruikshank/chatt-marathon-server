@@ -110,7 +110,7 @@ var resetInterval = 24000;
 
 var sampler = location.hash
   ? RecordedData(location.hash.slice(1), 10)
-  : LiveData();
+  : LiveData(['59684800','596849CA']);
 
 var v = {
   norm : function(v) { return Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]); },

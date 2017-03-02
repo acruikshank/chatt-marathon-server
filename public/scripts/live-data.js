@@ -100,7 +100,7 @@ LiveData = function(devices, ready, listener) {
 
     function connect() {
       var protocol = location.protocol.replace('http','ws');
-      ws = new WebSocket(protocol+location.host);
+      ws = new WebSocket(protocol+location.host+'/ws');
       ws.binaryType = 'arraybuffer';
       ws.addEventListener('message',  onMessage);
       ws.addEventListener('open', function() {

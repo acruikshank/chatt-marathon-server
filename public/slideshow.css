@@ -132,7 +132,9 @@ background: linear-gradient(to right, rgba(29,91,101,1) 0%, rgba(29,100,70,1) 10
 }
 
 .slide h1.bottom-left {
-  top: 60%;
+  bottom: 0%;
+  margin-bottom: 5%;
+  top: auto;
   right: auto;
   left: 5%;
 }

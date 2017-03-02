@@ -1,0 +1,344 @@
+<html>
+  <head>
+    <title>Chattanooga Marathon Mental Activity</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href='https://fonts.googleapis.com/css?family=Dosis:600' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    @font-face {
+      font-family: 'metropolis';
+      src: url('metropolis/Metropolis-Regular.otf');
+    }
+    @font-face {
+      font-family: 'metropolis-bold';
+      src: url('metropolis/Metropolis-Bold.otf');
+    }
+    html, body { margin:0; width: 100%; height:100%; overflow: hidden; font-family: 'metropolis', sans-serif; }
+    body {
+      background-color: #FAF4EF;
+      background: linear-gradient(to bottom, #EDF1EF 0%,#FAF4EF 100%);
+    }
+    .logo { position: absolute; top: 3vh; left: 3vh; width: 10vw; }
+    .grid { position:absolute; width: 36vw; height: 36vw; right: 10vw; top: -2vw; }
+    .activity-legend { position: absolute; width: 24vw; height: 24vw; right: 16vw; top: 4vw; opacity: 1; }
+    .runner { top: 0; position:absolute; width: 100%; height: 100vh; left:100%; text-align: right; display: none;
+      opacity: 1;
+      transition: left .5s ease, opacity .2s linear; }
+    .runner.ondeck { left: 0; display: block; opacity:0; }
+    .runner.active { left: 0; display: block; }
+    .runner.exiting { left: 0; display: block; opacity: 0; }
+    .runner img.background { position: absolute; top: 0%; width: 30vw; right: 42vw; opacity: .3;}
+    .runner .bio { font-size: 2vh; line-height: 3vh; position: absolute; top: 55vh; height: 40%; width:50%; right: 14vw;
+      opacity: 1; text-align: left;
+      padding: 0 0 0 0; margin: 0 0 0 0; overflow: hidden; color: #929290;
+    }
+    #names { position: absolute; width:100%; height: 100%; top:0; left:0; z-index: 1; }
+    #names h2 {
+      font-size: 1.8vh; position: absolute; top: 4%; margin: 0; right: 0; color: rgba(100,100,100,.9); text-transform: uppercase;
+      cursor: pointer; white-space: nowrap;
+      transition: top .4s ease, right 1.3s ease, color .3s linear, font-size 1s ease, width 1s ease;
+      width: 8%;
+      border-top: 2px solid rgb(125, 125, 125);
+      padding: 1vh 1vh 4vh;
+    }
+    #names h2.name1 {top:11%;}
+    #names h2.name2 {top:18%;}
+    #names h2.name3 {top:25%;}
+    #names h2.name4 {top:32%;}
+    #names h2.name5 {top:39%;}
+    #names h2.name6 {top:46%;}
+    #names h2.name7 {top:53%;}
+    #names h2.name8 {top:60%;}
+    #names h2.name9 {top:67%;}
+    #names h2.selected {
+      text-transform: capitalize; top:45vh; right:42vw; font-size: 6vh; width: 20vw; font-family: 'metropolis-bold', sans-serif;
+      color: rgb(62, 111, 141); border-color: rgb(62, 111, 141);
+    }
+    #names h2 .color {
+      display: inline-block;
+      display: none;
+      height: 2vh;
+      width: 2vh;
+      vertical-align: baseline;
+      border: solid;
+      border-width: .65vh;
+      margin-left: .25em;
+      border-radius: 4vh;
+    }
+    #names h2.selected .color { height: 2.5vh; width: 2.5vh; border-width: 1vh; }
+    #names .name0 .color { border-color: rgba(22, 105, 128, 1); }
+    #names .name1 .color { border-color: rgba(224, 45, 27, 0.87); }
+    #names .name2 .color { border-color: rgba(224, 145, 27, 0.87); }
+    #names .name3 .color { border-color: rgba(69, 164, 11, 0.87); }
+    #names .name4 .color { border-color: rgba(18, 175, 123, 0.87); }
+    #names .name5 .color { border-color: rgba(128, 41, 205, 0.87); }
+    #names .name6 .color { border-color: rgba(236, 18, 201, 0.87); }
+    #names .name7 .color { border-color: rgba(66, 65, 68, 0.87); }
+    #names .name8 .color { border-color: rgba(157, 157, 157, 0.87); }
+
+    .map { position: absolute; left: 5%; top: 5%; width: 30%; }
+    #map-background { width: 100%; opacity: .4;}
+    #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
+    .graphs { position: absolute; left:0; width: 100%; bottom:0; height: 22vh; background-color: rgba(0,0,0,.0); }
+    .time-series { position: absolute; bottom:0; left:0; width: 90%; height: 22vh; transition: bottom .3s ease; }
+    .exiting .time-series, .ondeck .time-series { bottom:-22vh; }
+    .legend { position: absolute; bottom: 0; width: 18%; left: 91%; height: 22vh; text-align: left; }
+    .legend span {
+      display: block; height: 33%; background: rgba(0,0,0,.2); margin-bottom: 1%; padding: .5em;
+      box-sizing: border-box; color: #faf4e4; font-size: 1.75vh;
+    }
+    .legend .activity {
+      background-color: rgba(0,0,0,.5);
+      background: linear-gradient(to bottom, rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 100%);
+    }
+    .legend .focus {
+      background-color: rgba(61, 131, 161, 1);
+      background: linear-gradient(to bottom, rgba(61, 131, 161, 1) 0%, rgba(61, 161, 134, 0.5) 50%, rgba(61, 161, 110, 0) 100%);
+    }
+    .legend .excitement {
+      background-color: rgba(167, 39, 62, 1);
+      background: linear-gradient(to bottom, rgba(167, 39, 62, 1) 0%, rgba(213, 57, 7, 0.6) 30%, rgba(203, 184, 91, .2) 100%);
+    }
+
+    @media (max-width: 640px) {
+      body { overflow-y: auto; }
+      .runner, .map { display: block; position: relative; width: 100%; }
+      .bounds { position: absolute; width: 100%; height: 100vh; top: 0; left: 0; overflow: hidden; }
+      .grid { display: none; }
+      .activity-legend { display: none; }
+      .time-series { width: 80%; }
+      .legend { position: absolute; bottom: 0; width: 19%; left: 81%; height: 22vh; text-align: left; }
+      .map { left: 10%; top: 5%; width: 80%; margin-left: 0; }
+    }
+    </style>
+    <script src="scripts/sylvester.js" type="text/javascript"></script>
+    <script src="scripts/glUtils.js" type="text/javascript"></script>
+    <script src="scripts/sketchbook-util.js" type="text/javascript"></script>
+    <script src="scripts/recorded-data.js" type="text/javascript"></script>
+    <script src="scripts/live-data.js" type="text/javascript"></script>
+    <script src="scripts/playback-data.js" type="text/javascript"></script>
+    <script src="scripts/grid.js" type="text/javascript"></script>
+    <script src="scripts/location-multi.js" type="text/javascript"></script>
+    <script src="scripts/time-series.js" type="text/javascript"></script>
+    <script id="flat" type="x-shader/x-vertex">
+      precision mediump float;
+
+      attribute vec2 position;
+
+      void main(void) {
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    </script>
+
+    <script id="grid" type="x-shader/x-fragment">
+      precision mediump float;
+
+      uniform float theta;
+      uniform vec2 size;
+      uniform vec4 diagonals;
+      uniform float samples[25];
+      uniform vec2 offset;
+      uniform float weight;
+
+      void main(void) {
+        vec2 effectiveSize = vec2(1400.0);
+        vec2 center = effectiveSize*offset;
+        vec2 offset = effectiveSize*gl_FragCoord.xy/size.x - center;
+        float angle = atan(offset.y, offset.x);
+        float norm = length(offset);
+
+        vec4 angleOffset = diagonals - angle;
+        vec4 aShape = exp(-angleOffset*angleOffset*6.0);
+        float logR = log(norm*0.003);
+        float rShape = exp(-logR*logR*10.0);
+        float cShape = exp(-norm*norm * 0.00008);
+
+        vec4 signal = vec4(samples[0], samples[5], samples[10], samples[15]);
+
+        // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
+
+        float distort = 1.0 + norm * 0.01;
+        float shape = rShape * dot(aShape,1.5*weight*signal) + cShape * weight*samples[20];
+        vec2 mapCoord = offset * mix(1.0,.6 + .35*sin(norm*.03 + .1*theta),shape);
+        vec2 coord = sin(0.15 *mapCoord);
+        float alpha = 50.0*(max(0.0,max(coord.x, coord.y))-1.0 + .04*shape);
+        // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
+        vec3 color = mix(vec3(0.4,0.48,0.4), vec3(0.3,0.45,0.5), clamp(4.0*shape,0.0,1.5));
+        gl_FragColor = vec4(color, alpha);
+      }
+    </script>
+    <script id="runner-template" type="text/html">
+      <img class="activity-legend" src="activity.png"/>
+      <div class="bounds">
+        <img class="background" src="{image}"/>
+      </div>
+      <dir class="bio">{bio}</dir>
+      <canvas id="grid{index}" class="grid">
+        Your browser doesn't appear to support the WebGL needed to display this graphic.
+      </canvas>
+      <canvas id="time-series{index}" class="time-series"></canvas>
+    </script>
+  </head>
+
+  <body>
+    <img class="logo" src="cmbw-logo-2x.png"/>
+    <div class="map">
+      <img src="map-detailed-2017.png" id="map-background"/>
+      <canvas id="location"></canvas>
+    </div>
+    <div id="names">
+    </div>
+    <div class="legend">
+      <span class="activity">ACTIVITY</span>
+      <span class="focus">FOCUS</span>
+      <span class="excitement">EXCITEMENT</span>
+    </div>
+  </body>
+  <script>
+
+  /*
+    Eric - 59683FD7, 59684147
+    Kelsey - 59684800
+    Me - 596849CA,
+
+1) 5A6858E4 Eric Hungenberg
+2) 5A68590C Dan Basler
+3) 59684800 Emilie Rice
+4) 59684147 Leah Tatman
+5) 596848FA Stacey Malecky
+6) 5A688204 Jessica Marlier
+7) 5A68589E Benjamin Gates
+8) 5A68815C Matthew Jenkins
+9) 59683FD7 Eric Heinlien
+10) 5A6859A7 Emery Zarider
+   */
+  var runners = [
+    {name: "Stacey", serials: ['596848FA', '596849CA'], color:'rgba(22, 105, 128, 1)', image:'stacey.png', bio:"I have been\
+      running for about 20 years and have raced distances ranging from 1 to 100 miles on road and trail. To-date I’ve completed about 15 marathons\
+      and hope to stay healthy enough for many more! My preferred distances are marathon and beyond. I am not an especially competitive person, so\
+      running and racing for me is mostly about destressing, living in the moment, and enjoying the outdoors. I am excited to be a part of this\
+      research project and look forward to seeing my race experience in the form of brain waves!"},
+    {name: "Jessica", serials: ['5A688204','5A68593D'], color:'rgba(22, 105, 128, 1)', image:'jessica.png', bio:"I was born and\
+      raised in Central Florida until I moved to Chattanooga, TN in 2005 to attend Southern Adventist University where I received my degree\
+      in Physical Education and Health. I’ve been a running and racing since I joined the school cross country team in the 7th grade and it’s\
+      continued to make life better and better to this day. I signed up and ran my first marathon during my freshman year in college to stay in\
+      shape and challenge myself. In the process, I discovered my love for running longer distances. I enjoy traveling and exploring new areas\
+      to run all over the country and the world. One of the most amazing places I’ve gotten to run was in rolling hills of Ethiopia, where I\
+      spent 10 months working as a student missionary. I’ve always enjoyed finding ways to help and give back to the running community that has\
+      given me so much in my lifetime. I started working as a marathon pace group leader for marathonpacing.com in 2013. Being a pacer has given\
+      me the opportunity to run in awesome marathons all over the country but more importantly it gives me the chance to meet so many hard working\
+      and inspirational people and help them reach their running goals. 17 years and 30 marathons later my love for running and the adventure that\
+      comes along with it is still strong!"},
+    {name: "Emilie", serials: ['59684800'], color:'rgba(22, 105, 128, 1)', image:'eric.png', bio:"Emilie Rice ran her first half marathon distance\
+      barefoot on the beach as a result of loosing track of time and distance the morning of May 13, 2015. Curious to see what she could do with shoes\
+      on, she ran the Four Bridges Half Marathon on October 18, 2015. After finishing that race in 1:57, she began training for the inaugural Erlanger\
+      Chattanooga Marathon on March 6, 2016, finishing in 4:57. On October 16, 2016 she ran Chattanooga’s Seven Bridges Marathon in 5:04. Despite\
+      finishing with both knees injured, she recovered and began training for the Mercedes Half Marathon on February 12, 2017, finishing with a PR of\
+      1:55. She loves the mental challenge and stimulus that distance running provides. This will be her third full marathon. If all goes well, she is\
+      hoping to complete an Ironman 70.3 within the next year. Aside from running, she enjoys rock climbing, hiking, and biking. The 22-year-old is\
+      native to the Chattanooga and North Georgia area and currently studies dietetics at UTC."},
+    {name: "Benjamin", serials: ['5A68589E'], color:'rgba(22, 105, 128, 1)', image:'benjamin.png', bio:"My name is Benjamin Gates.\
+      Im 35 years old, im a machinist by trade. Im married to Cassaundra Gates. We have two daughters Raelynn (9) and Izabella(8).\
+      I started running about 2 years ago. I have run several other races: half marathons,15k,10k, and 5k races. In 2015, I got to\
+      run in the Ragnar relay race from Chattanooga to Nashville with amputee blade runners. My youngest daughter Izabella was in a\
+      four wheeler accident in 2014 where she lost part of right lower leg. Her, along with getting to meet several other amputees,\
+      has motivated me to be more active. She is my reason for running. This is my 1st full marathon."},
+    {name: "Eric", serials: ['5A6858E4'], color:'rgba(22, 105, 128, 1)', image:'eric2.png', bio:"My name is Eric Hungenberg. I am a Professor of\
+      Sport Administration at the University of Tennessee at Chattanooga. My wife, daughter, and I moved to Chattanooga just two years ago from\
+      Colorado, and are extremely thankful to have found a new home whose culture and resources encourage and support our outdoor recreational hobbies.\
+      Although I have traded in my skis for trail running shoes, outdoor physical activity remains my boulevard to adventure, as well as my therapeutic\
+      outlet. This will be my 3rd marathon, with hopes of more to come!"},
+    {name: "Emery", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'eric.png', bio:"My name is Emery Zarider. I'm a junior in UTC's\
+      dietetics program. I've never actually ran a road marathon before but I have done a 50k as well as a couple of long-distance trail runs."},
+    {name: "Dan", serials: ['5A68590C'], color:'rgba(22, 105, 128, 1)', image:'dan.png', bio:"Dan Basler lives here in\
+      Chattanooga with his wife Carlene and two children, Elias and Finnlea. Dan teaches wellness and physical education\
+      and coaches soccer and volleyball at Lookout Valley Middle and High. Dan started trail running two years ago and completed\
+      his first half marathon in November. This will be his first full marathon."},
+    {name: "Erich", serials: ['59683FD7'], color:'rgba(22, 105, 128, 1)', image:'erich.png', bio:"I have done running in some\
+      form pretty much all my life. My motivations for wanting to run have evolved as I’ve gotten older. At first it was a simple\
+      recognition of the fact that I needed to be physically fit for basketball as I played in a boys club league and church league.\
+      Now it’s a simple recognition of the fact that I am getting older and it’s harder to stay fit as you age. This is my third marathon,\
+      including the second time running the Chattanooga Marathon. The other was the Atlanta Publix Marathon in 2014.\
+      In addition to the the three marathons I have also done 15 half marathons which span as far West as Las Vegas and also a number\
+      of the local races including the Four Bridges half marathon and Chickamauga. In addition to that I also have done a number of 5K and 10K’s."},
+    {name: "Matthew", serials: ['5A68815C'], color:'rgba(22, 105, 128, 1)', image:'matthew.png', bio:"I am a recent Lee University graduate with a\
+      degree in Health Science. I'm currently working as a Pharmacy tech and am studying for the MCAT, with a goal of attending medical school and\
+      possibly getting an MD/PhD dual degree. I'm a huge science nerd, and also love reading good books and watching great movies. I love coffee. At\
+      Lee, I ran for the XC and track teams, and have finished my first marathon in December at Rocket City. I came through 21 miles on pace to run 2:36,\
+      then hit the wall hard and ran 2:43. I plan to practice fueling for a fall marathon at the Erlanger Chattanooga Marathon."}
+  ];
+
+  var template = document.getElementById('runner-template').innerHTML;
+  var names = document.getElementById('names');
+  var runnerLocations;
+  runners.forEach(function(runner, index) {
+    var runnerDom = document.createElement('div');
+    runnerDom.id = 'runner' + index;
+    runnerDom.setAttribute('class',index == 0 ? 'runner active' : 'runner');
+    runnerDom.innerHTML = template.replace(/\{index\}/g, index).replace(/\{bio\}/g, runner.bio||'').replace(/\{image\}/g, runner.image);
+    document.body.appendChild(runnerDom);
+
+    var name = document.createElement('h2');
+    name.setAttribute('class',(index == 0 ? 'selected ' : '') + 'name'+index);
+    name.addEventListener('click',selectionHandler(index))
+    name.innerHTML = runner.name;
+    var color = document.createElement('span');
+    color.setAttribute('class', 'color');
+    name.appendChild(color);
+    names.appendChild(name);
+
+    // runner.sampler = PlaybackData(['5A68593D'],
+    //   new Date('2017/02/12 11:30:00 est'),
+    //   new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
+
+    runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
+
+    var timeSeries = document.getElementById('time-series'+index);
+    var ts0 = document.getElementById('time-series0');
+    timeSeries.width = ts0.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries.height = ts0.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries, runner.sampler, .001);
+  })
+
+  window.onload = function() {
+    var locationCanvas = document.getElementById('location');
+    locationCanvas.width = 748;
+    locationCanvas.height = 1190;
+    runnerLocations = Location(locationCanvas, runners);
+  }
+
+  function graph(index, sampler) {
+    var canvas = document.getElementById('grid'+index);
+    var canvas0 = document.getElementById('grid0');
+    canvas.width = canvas0.offsetWidth * (window.devicePixelRatio||1);
+    canvas.height = canvas0.offsetHeight * (window.devicePixelRatio||1);
+    runners[index].grid = Grid(canvas, sampler, .5, .5, index!=0);
+  }
+
+  var selectionTimeout;
+  function selectionHandler(index) {
+    return function() {
+      clearTimeout(selectionTimeout);
+      runners.forEach(function(runner, i) {
+        runner.grid.disable();
+      })
+      runners[index].grid.enable();
+      document.querySelectorAll('#names h2').forEach(function(n,i) { n.setAttribute('class','name'+i) })
+      document.querySelector('.name'+index).setAttribute('class','selected name'+index);
+
+      document.querySelectorAll('.runner').forEach(function(n,i) {
+        n.setAttribute('class',/active/.exec(n.getAttribute('class')) ? 'runner exiting' : 'runner');
+      })
+      document.querySelector('#runner'+index).setAttribute('class','runner ondeck');
+
+      selectionTimeout = setTimeout(function() {
+        document.querySelector('.runner.ondeck').setAttribute('class','runner active');
+      }, 300);
+
+      runnerLocations.setActive(index);
+    }
+  }
+
+  </script>
+</html>

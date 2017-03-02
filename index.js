@@ -5,7 +5,7 @@ var fs = require('fs');
 var concat = require('concat-stream');
 var JSONStream = require('JSONStream');
 var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({ server: server });
+var wss = new WebSocketServer({ server: server, path: '/ws' });
 var db = require('./db');
 var port = process.env.PORT || 5000;
 

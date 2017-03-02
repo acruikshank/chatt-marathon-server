@@ -27,7 +27,7 @@ TimeSeries = function(canvas, sampler, avgEase) {
 
     var maxValue = Math.max(computed.maxActivity, computed.maxFocus);
     maxValue = Math.max(maxValue, computed.maxExcitement)
-    if (maxValue < .000001) return;
+    if (isNaN(maxValue) || maxValue < .000001) return;
 
     var scale = .98 * ch / maxValue;
 
