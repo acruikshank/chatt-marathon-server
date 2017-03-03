@@ -28,10 +28,16 @@
     .runner.ondeck { left: 0; display: block; opacity:0; }
     .runner.active { left: 0; display: block; }
     .runner.exiting { left: 0; display: block; opacity: 0; }
-    .runner img.background { position: absolute; top: 0%; width: 30vw; right: 42vw; opacity: .3;}
-    .runner .bio { font-size: 2vh; line-height: 3vh; position: absolute; top: 55vh; height: 40%; width:50%; right: 14vw;
-      opacity: 1; text-align: left;
-      padding: 0 0 0 0; margin: 0 0 0 0; overflow: hidden; color: #929290;
+    .runner img.background { position: absolute; top: 0%; width: 30vw; right: 42vw; opacity: .5;}
+    .runner .shade { position: absolute; top: 47vh; width: 24vw; height: 40%; right: 41vw;
+      opacity: 0; transition: opacity 1s ease-in;
+      background-color: rgba(248, 244, 239, 0.5);
+      background: linear-gradient(to bottom, rgba(250, 244, 239, 0.5) 0%, rgb(248, 244, 239) 50%, rgb(248, 244, 239) 100%);
+    }
+    .runner.active .shade, .runner.active .bio { opacity: 1; }
+    .runner .bio { font-size: 2vh; line-height: 3vh; position: absolute; top: 56vh; height: 24vh; width:50%; right: 14vw;
+      opacity: 0; transition: opacity 1s ease-in; text-align: left;
+      padding: 0 0 0 0; margin: 0 0 0 0; overflow: hidden; color: #93938d;
     }
     #names { position: absolute; width:100%; height: 100%; top:0; left:0; z-index: 1; }
     #names h2 {
@@ -39,7 +45,7 @@
       cursor: pointer; white-space: nowrap;
       transition: top .4s ease, right 1.3s ease, color .3s linear, font-size 1s ease, width 1s ease;
       width: 8%;
-      border-top: 2px solid rgb(125, 125, 125);
+      border-top: 1px solid rgb(125, 125, 125);
       padding: 1vh 1vh 4vh;
     }
     #names h2.name1 {top:11%;}
@@ -52,7 +58,7 @@
     #names h2.name8 {top:60%;}
     #names h2.name9 {top:67%;}
     #names h2.selected {
-      text-transform: capitalize; top:45vh; right:42vw; font-size: 6vh; width: 20vw; font-family: 'metropolis-bold', sans-serif;
+      text-transform: capitalize; top:47vh; right:42vw; font-size: 6vh; width: 20vw; font-family: 'metropolis-bold', sans-serif;
       color: rgb(62, 111, 141); border-color: rgb(62, 111, 141);
     }
     #names h2 .color {
@@ -169,9 +175,9 @@
       }
     </script>
     <script id="runner-template" type="text/html">
-      <img class="activity-legend" src="activity.png"/>
       <div class="bounds">
         <img class="background" src="{image}"/>
+        <div class="shade"></div>
       </div>
       <dir class="bio">{bio}</dir>
       <canvas id="grid{index}" class="grid">
@@ -187,6 +193,7 @@
       <img src="map-detailed-2017.png" id="map-background"/>
       <canvas id="location"></canvas>
     </div>
+    <img class="activity-legend" src="activity.png"/>
     <div id="names">
     </div>
     <div class="legend">
@@ -214,12 +221,17 @@
 10) 5A6859A7 Emery Zarider
    */
   var runners = [
-    {name: "Stacey", serials: ['596848FA', '596849CA'], color:'rgba(22, 105, 128, 1)', image:'stacey.png', bio:"I have been\
+    {name: "Stacey", serials: ['596848FA', '596849CA'], color:'rgba(0, 133, 170, 1)', image:'stacey.png', bio:"I have been\
       running for about 20 years and have raced distances ranging from 1 to 100 miles on road and trail. To-date I’ve completed about 15 marathons\
       and hope to stay healthy enough for many more! My preferred distances are marathon and beyond. I am not an especially competitive person, so\
       running and racing for me is mostly about destressing, living in the moment, and enjoying the outdoors. I am excited to be a part of this\
       research project and look forward to seeing my race experience in the form of brain waves!"},
-    {name: "Jessica", serials: ['5A688204','5A68593D'], color:'rgba(22, 105, 128, 1)', image:'jessica.png', bio:"I was born and\
+    {name: "Eric", serials: ['5A6858E4'], color:'rgba(0, 94, 255, 1)', image:'eric2.png', bio:"My name is Eric Hungenberg. I am a Professor of\
+      Sport Administration at the University of Tennessee at Chattanooga. My wife, daughter, and I moved to Chattanooga just two years ago from\
+      Colorado, and are extremely thankful to have found a new home whose culture and resources encourage and support our outdoor recreational hobbies.\
+      Although I have traded in my skis for trail running shoes, outdoor physical activity remains my boulevard to adventure, as well as my therapeutic\
+      outlet. This will be my 3rd marathon, with hopes of more to come!"},
+    {name: "Jessica", serials: ['5A688204','5A68593D'], color:'rgba(0, 128, 182, 1)', image:'jessica.png', bio:"I was born and\
       raised in Central Florida until I moved to Chattanooga, TN in 2005 to attend Southern Adventist University where I received my degree\
       in Physical Education and Health. I’ve been a running and racing since I joined the school cross country team in the 7th grade and it’s\
       continued to make life better and better to this day. I signed up and ran my first marathon during my freshman year in college to stay in\
@@ -230,7 +242,13 @@
       me the opportunity to run in awesome marathons all over the country but more importantly it gives me the chance to meet so many hard working\
       and inspirational people and help them reach their running goals. 17 years and 30 marathons later my love for running and the adventure that\
       comes along with it is still strong!"},
-    {name: "Emilie", serials: ['59684800'], color:'rgba(22, 105, 128, 1)', image:'eric.png', bio:"Emilie Rice ran her first half marathon distance\
+    {name: "Benjamin", serials: ['5A68589E'], color:'rgba(22, 105, 128, 1)', image:'benjamin.png', bio:"My name is Benjamin Gates.\
+      Im 35 years old, im a machinist by trade. Im married to Cassaundra Gates. We have two daughters Raelynn (9) and Izabella(8).\
+      I started running about 2 years ago. I have run several other races: half marathons,15k,10k, and 5k races. In 2015, I got to\
+      run in the Ragnar relay race from Chattanooga to Nashville with amputee blade runners. My youngest daughter Izabella was in a\
+      four wheeler accident in 2014 where she lost part of right lower leg. Her, along with getting to meet several other amputees,\
+      has motivated me to be more active. She is my reason for running. This is my 1st full marathon."},
+    {name: "Emilie", serials: ['59684800'], color:'rgba(22, 105, 128, 1)', image:'emilie.png', bio:"Emilie Rice ran her first half marathon distance\
       barefoot on the beach as a result of loosing track of time and distance the morning of May 13, 2015. Curious to see what she could do with shoes\
       on, she ran the Four Bridges Half Marathon on October 18, 2015. After finishing that race in 1:57, she began training for the inaugural Erlanger\
       Chattanooga Marathon on March 6, 2016, finishing in 4:57. On October 16, 2016 she ran Chattanooga’s Seven Bridges Marathon in 5:04. Despite\
@@ -238,20 +256,18 @@
       1:55. She loves the mental challenge and stimulus that distance running provides. This will be her third full marathon. If all goes well, she is\
       hoping to complete an Ironman 70.3 within the next year. Aside from running, she enjoys rock climbing, hiking, and biking. The 22-year-old is\
       native to the Chattanooga and North Georgia area and currently studies dietetics at UTC."},
-    {name: "Benjamin", serials: ['5A68589E'], color:'rgba(22, 105, 128, 1)', image:'benjamin.png', bio:"My name is Benjamin Gates.\
-      Im 35 years old, im a machinist by trade. Im married to Cassaundra Gates. We have two daughters Raelynn (9) and Izabella(8).\
-      I started running about 2 years ago. I have run several other races: half marathons,15k,10k, and 5k races. In 2015, I got to\
-      run in the Ragnar relay race from Chattanooga to Nashville with amputee blade runners. My youngest daughter Izabella was in a\
-      four wheeler accident in 2014 where she lost part of right lower leg. Her, along with getting to meet several other amputees,\
-      has motivated me to be more active. She is my reason for running. This is my 1st full marathon."},
-    {name: "Eric", serials: ['5A6858E4'], color:'rgba(22, 105, 128, 1)', image:'eric2.png', bio:"My name is Eric Hungenberg. I am a Professor of\
-      Sport Administration at the University of Tennessee at Chattanooga. My wife, daughter, and I moved to Chattanooga just two years ago from\
-      Colorado, and are extremely thankful to have found a new home whose culture and resources encourage and support our outdoor recreational hobbies.\
-      Although I have traded in my skis for trail running shoes, outdoor physical activity remains my boulevard to adventure, as well as my therapeutic\
-      outlet. This will be my 3rd marathon, with hopes of more to come!"},
-    {name: "Emery", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'eric.png', bio:"My name is Emery Zarider. I'm a junior in UTC's\
+    {name: "Emery", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'emotive.png', bio:"My name is Emery Zarider. I'm a junior in UTC's\
       dietetics program. I've never actually ran a road marathon before but I have done a 50k as well as a couple of long-distance trail runs."},
-    {name: "Dan", serials: ['5A68590C'], color:'rgba(22, 105, 128, 1)', image:'dan.png', bio:"Dan Basler lives here in\
+    {name: "Matthew", serials: ['5A68815C'], color:'rgba(22, 105, 128, 1)', image:'matthew.png', bio:"I am a recent Lee University graduate with a\
+      degree in Health Science. I'm currently working as a Pharmacy tech and am studying for the MCAT, with a goal of attending medical school and\
+      possibly getting an MD/PhD dual degree. I'm a huge science nerd, and also love reading good books and watching great movies. I love coffee. At\
+      Lee, I ran for the XC and track teams, and have finished my first marathon in December at Rocket City. I came through 21 miles on pace to run 2:36,\
+      then hit the wall hard and ran 2:43. I plan to practice fueling for a fall marathon at the Erlanger Chattanooga Marathon."},
+    {name: "Leah", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'leah.png', bio:"My name is Leah Tatman and I am a junior at the University\
+      of Tennessee at Chattanooga with the hopes of pursuing a career in Occupational Therapy. I am originally from Jackson, Tennessee. Throughout middle\
+      school and high school I was very involved in sports, but never had any interesting in running. I didn't start running until my sophomore year of\
+      college and that March I ran my first half marathon, and now a year later I am running my first marathon."},
+    {name: "Dan", serials: ['5A68590C'], color:'rgba(22, 105, 128, 1)', image:'basler.png', bio:"Dan Basler lives here in\
       Chattanooga with his wife Carlene and two children, Elias and Finnlea. Dan teaches wellness and physical education\
       and coaches soccer and volleyball at Lookout Valley Middle and High. Dan started trail running two years ago and completed\
       his first half marathon in November. This will be his first full marathon."},
@@ -261,17 +277,15 @@
       Now it’s a simple recognition of the fact that I am getting older and it’s harder to stay fit as you age. This is my third marathon,\
       including the second time running the Chattanooga Marathon. The other was the Atlanta Publix Marathon in 2014.\
       In addition to the the three marathons I have also done 15 half marathons which span as far West as Las Vegas and also a number\
-      of the local races including the Four Bridges half marathon and Chickamauga. In addition to that I also have done a number of 5K and 10K’s."},
-    {name: "Matthew", serials: ['5A68815C'], color:'rgba(22, 105, 128, 1)', image:'matthew.png', bio:"I am a recent Lee University graduate with a\
-      degree in Health Science. I'm currently working as a Pharmacy tech and am studying for the MCAT, with a goal of attending medical school and\
-      possibly getting an MD/PhD dual degree. I'm a huge science nerd, and also love reading good books and watching great movies. I love coffee. At\
-      Lee, I ran for the XC and track teams, and have finished my first marathon in December at Rocket City. I came through 21 miles on pace to run 2:36,\
-      then hit the wall hard and ran 2:43. I plan to practice fueling for a fall marathon at the Erlanger Chattanooga Marathon."}
+      of the local races including the Four Bridges half marathon and Chickamauga. In addition to that I also have done a number of 5K and 10K’s."}
   ];
 
   var template = document.getElementById('runner-template').innerHTML;
   var names = document.getElementById('names');
   var runnerLocations;
+  var currentIndex = 0;
+  var timeouts = [], intervals = [];
+
   runners.forEach(function(runner, index) {
     var runnerDom = document.createElement('div');
     runnerDom.id = 'runner' + index;
@@ -288,11 +302,11 @@
     name.appendChild(color);
     names.appendChild(name);
 
-    // runner.sampler = PlaybackData(['5A68593D'],
-    //   new Date('2017/02/12 11:30:00 est'),
-    //   new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
+    runner.sampler = PlaybackData(['5A68593D'],
+      new Date('2017/02/12 11:30:00 est'),
+      new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
 
-    runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
+    // runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
 
     var timeSeries = document.getElementById('time-series'+index);
     var ts0 = document.getElementById('time-series0');
@@ -316,10 +330,12 @@
     runners[index].grid = Grid(canvas, sampler, .5, .5, index!=0);
   }
 
-  var selectionTimeout;
   function selectionHandler(index) {
     return function() {
-      clearTimeout(selectionTimeout);
+      currentIndex = index;
+
+      clearTimeouts();
+      clearIntervals();
       runners.forEach(function(runner, i) {
         runner.grid.disable();
       })
@@ -332,13 +348,32 @@
       })
       document.querySelector('#runner'+index).setAttribute('class','runner ondeck');
 
-      selectionTimeout = setTimeout(function() {
+      clearableTimeout(function() {
         document.querySelector('.runner.ondeck').setAttribute('class','runner active');
       }, 300);
+
+
+      document.querySelector('#runner'+index+' .bio').scrollTop = 0;
+      clearableTimeout(function() {
+        var bio = document.querySelector('.runner.active .bio');
+        var timeSinceLastUpdate = new Date().getTime();
+        clearableInterval(function() {
+          var time = new Date().getTime();
+          if (time - timeSinceLastUpdate > 200) {
+            bio.scrollTop = bio.scrollTop + 1;
+            timeSinceLastUpdate+= 200;
+          }
+        }, 20) },
+      5000);
 
       runnerLocations.setActive(index);
     }
   }
+
+  function clearableTimeout(f, ms) { timeouts.push(setTimeout(f,ms)); }
+  function clearableInterval(f, ms) { intervals.push(setInterval(f,ms)); }
+  function clearTimeouts() { timeouts.forEach(function(t) { clearTimeout(t); }); timeouts=[]; }
+  function clearIntervals() { intervals.forEach(function(i) { clearInterval(i); }); intervals=[]; }
 
   </script>
 </html>
