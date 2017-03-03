@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Chattanooga Marathon Brainwaves</title>
+    <title>Chattanooga Marathon Brainwaves - 5k</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -207,79 +207,67 @@
   <script>
 
   /*
-    Eric - 59683FD7, 59684147
-    Kelsey - 59684800
-    Me - 596849CA,
+Me - 596849CA, 5A68593D
 
-1) 5A6858E4 Eric Hungenberg
-2) 5A68590C Dan Basler
-3) 59684800 Emilie Rice
-4) 59684147 Leah Tatman
-5) 596848FA Stacey Malecky
-6) 5A688204 Jessica Marlier
-7) 5A68589E Benjamin Gates
-8) 5A68815C Matthew Jenkins
-9) 59683FD7 Eric Heinlien
-10) 5A6859A7 Emery Zarider
+1) 5A6858E4 Tim Morgan
+2) 5A68590C Paul Smith
+3) 59684800 Annette Tolliver
+4) 59684147 John Brown
+5) 596848FA Christine Brown
+6) 5A688204 Lauren Howell
+7) 5A68589E Zachary Corbett
+8) 5A68815C Melanie Commander
    */
   var runners = [
-    {name: "Stacey", serials: ['596848FA', '596849CA'], color:'rgba(0, 133, 170, 1)', image:'stacey.png', bio:"I have been\
-      running for about 20 years and have raced distances ranging from 1 to 100 miles on road and trail. To-date I’ve completed about 15 marathons\
-      and hope to stay healthy enough for many more! My preferred distances are marathon and beyond. I am not an especially competitive person, so\
-      running and racing for me is mostly about destressing, living in the moment, and enjoying the outdoors. I am excited to be a part of this\
-      research project and look forward to seeing my race experience in the form of brain waves!"},
-    {name: "Eric", serials: ['5A6858E4'], color:'rgba(0, 94, 255, 1)', image:'eric2.png', bio:"My name is Eric Hungenberg. I am a Professor of\
-      Sport Administration at the University of Tennessee at Chattanooga. My wife, daughter, and I moved to Chattanooga just two years ago from\
-      Colorado, and are extremely thankful to have found a new home whose culture and resources encourage and support our outdoor recreational hobbies.\
-      Although I have traded in my skis for trail running shoes, outdoor physical activity remains my boulevard to adventure, as well as my therapeutic\
-      outlet. This will be my 3rd marathon, with hopes of more to come!"},
-    {name: "Jessica", serials: ['5A688204','5A68593D'], color:'rgba(0, 128, 182, 1)', image:'jessica.png', bio:"I was born and\
-      raised in Central Florida until I moved to Chattanooga, TN in 2005 to attend Southern Adventist University where I received my degree\
-      in Physical Education and Health. I’ve been a running and racing since I joined the school cross country team in the 7th grade and it’s\
-      continued to make life better and better to this day. I signed up and ran my first marathon during my freshman year in college to stay in\
-      shape and challenge myself. In the process, I discovered my love for running longer distances. I enjoy traveling and exploring new areas\
-      to run all over the country and the world. One of the most amazing places I’ve gotten to run was in rolling hills of Ethiopia, where I\
-      spent 10 months working as a student missionary. I’ve always enjoyed finding ways to help and give back to the running community that has\
-      given me so much in my lifetime. I started working as a marathon pace group leader for marathonpacing.com in 2013. Being a pacer has given\
-      me the opportunity to run in awesome marathons all over the country but more importantly it gives me the chance to meet so many hard working\
-      and inspirational people and help them reach their running goals. 17 years and 30 marathons later my love for running and the adventure that\
-      comes along with it is still strong!"},
-    {name: "Benjamin", serials: ['5A68589E'], color:'rgba(22, 105, 128, 1)', image:'benjamin.png', bio:"My name is Benjamin Gates.\
-      Im 35 years old, im a machinist by trade. Im married to Cassaundra Gates. We have two daughters Raelynn (9) and Izabella(8).\
-      I started running about 2 years ago. I have run several other races: half marathons,15k,10k, and 5k races. In 2015, I got to\
-      run in the Ragnar relay race from Chattanooga to Nashville with amputee blade runners. My youngest daughter Izabella was in a\
-      four wheeler accident in 2014 where she lost part of right lower leg. Her, along with getting to meet several other amputees,\
-      has motivated me to be more active. She is my reason for running. This is my 1st full marathon."},
-    {name: "Emilie", serials: ['59684800'], color:'rgba(22, 105, 128, 1)', image:'emilie.png', bio:"Emilie Rice ran her first half marathon distance\
-      barefoot on the beach as a result of loosing track of time and distance the morning of May 13, 2015. Curious to see what she could do with shoes\
-      on, she ran the Four Bridges Half Marathon on October 18, 2015. After finishing that race in 1:57, she began training for the inaugural Erlanger\
-      Chattanooga Marathon on March 6, 2016, finishing in 4:57. On October 16, 2016 she ran Chattanooga’s Seven Bridges Marathon in 5:04. Despite\
-      finishing with both knees injured, she recovered and began training for the Mercedes Half Marathon on February 12, 2017, finishing with a PR of\
-      1:55. She loves the mental challenge and stimulus that distance running provides. This will be her third full marathon. If all goes well, she is\
-      hoping to complete an Ironman 70.3 within the next year. Aside from running, she enjoys rock climbing, hiking, and biking. The 22-year-old is\
-      native to the Chattanooga and North Georgia area and currently studies dietetics at UTC."},
-    {name: "Emery", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'emotive.png', bio:"My name is Emery Zarider. I'm a junior in UTC's\
-      dietetics program. I've never actually ran a road marathon before but I have done a 50k as well as a couple of long-distance trail runs."},
-    {name: "Matthew", serials: ['5A68815C'], color:'rgba(22, 105, 128, 1)', image:'matthew.png', bio:"I am a recent Lee University graduate with a\
-      degree in Health Science. I'm currently working as a Pharmacy tech and am studying for the MCAT, with a goal of attending medical school and\
-      possibly getting an MD/PhD dual degree. I'm a huge science nerd, and also love reading good books and watching great movies. I love coffee. At\
-      Lee, I ran for the XC and track teams, and have finished my first marathon in December at Rocket City. I came through 21 miles on pace to run 2:36,\
-      then hit the wall hard and ran 2:43. I plan to practice fueling for a fall marathon at the Erlanger Chattanooga Marathon."},
-    {name: "Leah", serials: ['5A6859A7'], color:'rgba(22, 105, 128, 1)', image:'leah.png', bio:"My name is Leah Tatman and I am a junior at the University\
-      of Tennessee at Chattanooga with the hopes of pursuing a career in Occupational Therapy. I am originally from Jackson, Tennessee. Throughout middle\
-      school and high school I was very involved in sports, but never had any interesting in running. I didn't start running until my sophomore year of\
-      college and that March I ran my first half marathon, and now a year later I am running my first marathon."},
-    {name: "Dan", serials: ['5A68590C'], color:'rgba(22, 105, 128, 1)', image:'basler.png', bio:"Dan Basler lives here in\
-      Chattanooga with his wife Carlene and two children, Elias and Finnlea. Dan teaches wellness and physical education\
-      and coaches soccer and volleyball at Lookout Valley Middle and High. Dan started trail running two years ago and completed\
-      his first half marathon in November. This will be his first full marathon."},
-    {name: "Erich", serials: ['59683FD7'], color:'rgba(22, 105, 128, 1)', image:'erich.png', bio:"I have done running in some\
-      form pretty much all my life. My motivations for wanting to run have evolved as I’ve gotten older. At first it was a simple\
-      recognition of the fact that I needed to be physically fit for basketball as I played in a boys club league and church league.\
-      Now it’s a simple recognition of the fact that I am getting older and it’s harder to stay fit as you age. This is my third marathon,\
-      including the second time running the Chattanooga Marathon. The other was the Atlanta Publix Marathon in 2014.\
-      In addition to the the three marathons I have also done 15 half marathons which span as far West as Las Vegas and also a number\
-      of the local races including the Four Bridges half marathon and Chickamauga. In addition to that I also have done a number of 5K and 10K’s."}
+    {name: "Annette", serials: ['59684800','5A68593D'], color:'rgba(0, 128, 182, 1)', image:'annette.png', bio:"Annette Tolliver is a 51 year old\
+      mother of 3, grandmother of 2 that likes most things that involves being active as well as eating healthy foods. In her junior high and high school,\
+      she played volleyball, basketball and ran track. After delivering her children, she continued to be active by lifting weights and running a plethora\
+      of 5k’s, However; as she approached her 30’s, She felt as though she needed to fine-tune her nutritional habits in which she did. She reached two\
+      important milestones in her 40’s. First she completed her first marathon. Secondly she competed in a Figure competition. Throughout her 40’s She\
+      continued heathy eating and workout habits , then when she reached age 48, she was on mile 6 of 7 Bridges Half Marathon when a blood clot went to her\
+      lungs. At that time she was diagnosed with Rheumatoid Arthritis. Once she was diagnosed and started taking medication, swelling went down and she\
+      started back with her running. She is running for a purpose besides her health. She is on Team RWB (Red White and Blue) Enriching the lives of our\
+      veterans through physical and social activity. n closing, Annette’s husband and she have a daughter who is currently serving in the US Army; both\
+      their fathers were army veterans. Her motto is: Stay Strong, Stay Committed"},
+    {name: "John", serials: ['59684147'], color:'rgba(22, 105, 128, 1)', image:'john.png', bio:"My name is John Brown and I have a passion for outdoor\
+      recreation. This passion has led me to become a Landscape Architect with a specialty in designing linear parks and greenways like the recently\
+      completed Tennessee Riverpark and the South Chickamauga Creek greenway. I take great pleasure in running and biking on the parks I design with my\
+      wife and 8 children. My wife signed me up for my first 5k race in 2015 and we enjoyed it so much that we now try to run several races a year together.\
+      We are training for our first 10k race later this year."},
+    {name: "Christine", serials: ['596848FA'], color:'rgba(22, 105, 128, 1)', image:'christine.png', bio:"My name is Christine Brown and I have been running for 4\
+      years. I am a mom to 8 awesome kids who keep me active and I have been married for almost 20 years. As a family, we love to hike through the woods at\
+      the Chickamauga Battlefield and bike on the Riverwalk. My kids have all run a race or two with me, and they have their eyes set on a Disney race\
+      sometime in the future. My husband, John, is my biggest cheerleader. He runs with me to keep me company on cold mornings and keeps pace with me on race\
+      days. We want to make an active lifestyle fun and running races keeps it exciting for us all. When I started “running”, it was at best at a speed walk\
+      pace, but I kept at it and now I can run comfortably for several miles. I ran my first competitive 5k in 2015 and last year I ran five 5k races. This\
+      year I am training to run my first 10k. I hope I can be an encouragement to others to find the activity that makes them feel strong and to stick with it.\
+      For me, running is the foundation of my active lifestyle."},
+    {name: "Lauren", serials: ['5A688204'], color:'rgba(22, 105, 128, 1)', image:'lauren.png', bio:"Lauren Howell is a recreational runner born and raised\
+      in Houston, TX but currently running in Birmingham, AL. She absolutely loves running in Chattanooga though, and has participated in both the 2016 Erlanger\
+      Chattanooga Marathon and 5k, and the 2016 4 Bridges Half Marathon. She has been running 5k races her whole life but has only begun to focus on being\
+      more competitive as well as running longer races in the last two years. She runs with her teammates on the Cahaba Distance Project as well as incorporates\
+      speed workouts in order to get faster. Currently she is focused on reaching her goal of running a sub-20 minute 5k and also trying to select her next\
+      marathon. When she isn't running, she spends her time teaching Pilates, reading, playing with her new kitten, and making delicious coffee for the people\
+      of Birmingham!"},
+    {name: "Zachary", serials: ['5A68589E'], color:'rgba(22, 105, 128, 1)', image:'zachary.png', bio:"Zachary Corbett is an avid outdoorsman and software\
+      engineer living in Birmingham Alabama area. Being physically active in a myriad of ways, especially outdoors, has been a lifelong pastime for him.\
+      Whether it’s hiking trails, canoeing, weight lifting, or running 5ks, physical activity at any level is an important part of the day to day for him.\
+      Being involved locally in Birmingham with the Red Mountain Park, The Birmingham Audubon Society, or the Cahaba Distance Project are just other small\
+      ways he gets outdoors while helping out others and the environment. Zachary started running 5ks more seriously just a few years ago, and he noticed\
+      that he wanted to be able to run those 3.1 miles more effectively for his own sake. Last year he came to Chattanooga Marathon for the 5k, and ran\
+      one of his best times. When Zachary isn’t outdoors he’s busy working with various businesses helping them by building software solutions, another\
+      passion of his."},
+    {name: "Melanie", serials: ['5A68815C'], color:'rgba(22, 105, 128, 1)', image:'melanie.png', bio:"I am Melanie Commander. I am married to my husband,\
+      Trey, and we have two daughters. I work as literacy coach for two schools in Hamilton County. Running became a hobby later in life for me. After\
+      having my girls, I found that I couldn’t find time to get to a gym to work out. In the spring of 2013, the school that I was working decided to\
+      start a 5K race to raise funds for the PE department. With the guidance of the PE teacher and encouragement of others, I began training using a\
+      couch to 5K app. After that race I signed up for more and more 5K races and eventually tackled a half marathon.<br/></br/> Running is a way for\
+      me to constantly improve my health, set goals for myself, as well as show my daughters the importance of physical exercise and working toward a\
+      goal. I live by the quote, “If it doesn’t challenge you, it won’t change you.” Each run changes me for the better."},
+    {name: "Tim", serials: ['5A6858E4', '596849CA'], color:'rgba(0, 133, 170, 1)', image:'emotive.png', bio:"Tim Morgan is the Director of the\
+      Chattanooga Sports Committee."},
+    {name: "Paul", serials: ['5A68590C'], color:'rgba(0, 94, 255, 1)', image:'emotive.png', bio:"Paul Smith is the Director at Finley Stadium."},
+
   ];
 
   var template = document.getElementById('runner-template').innerHTML;
