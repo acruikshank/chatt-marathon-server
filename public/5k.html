@@ -85,7 +85,7 @@
     #names .name7 .color { border-color: rgba(66, 65, 68, 0.87); }
     #names .name8 .color { border-color: rgba(157, 157, 157, 0.87); }
 
-    .map { position: absolute; left: 5%; top: 5%; width: 30%; }
+    .map { position: absolute; left: -5%; top: -10%; width: 50%; }
     #map-background { width: 100%; opacity: .4;}
     #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
     .graphs { position: absolute; left:0; width: 100%; bottom:0; height: 22vh; background-color: rgba(0,0,0,.0); }
@@ -192,7 +192,7 @@
   <body>
     <img class="logo" src="cmbw-logo-2x.png"/>
     <div class="map">
-      <img src="map-detailed-2017.png" id="map-background"/>
+      <img src="map-detailed-5k.png" id="map-background"/>
       <canvas id="location"></canvas>
     </div>
     <img class="activity-legend" src="activity.png"/>
@@ -292,11 +292,11 @@ Me - 596849CA, 5A68593D
     name.appendChild(color);
     names.appendChild(name);
 
-    runner.sampler = PlaybackData(['5A68593D'],
-      new Date('2017/02/12 11:30:00 est'),
-      new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
+    // runner.sampler = PlaybackData(['5A68593D'],
+    //   new Date('2017/02/12 11:30:00 est'),
+    //   new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
 
-    // runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
+    runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
 
     var timeSeries = document.getElementById('time-series'+index);
     var ts0 = document.getElementById('time-series0');

@@ -1,0 +1,315 @@
+<html>
+  <head>
+    <title>Chattanooga Marathon Mental Activity</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href='https://fonts.googleapis.com/css?family=Dosis:600' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+      html, body { margin:0; width: 100%; height:100%; overflow: hidden; font-family: 'Dosis', sans-serif; }
+      .grid {
+        position:absolute;
+        width: 44vw;
+        height: 44vw;
+        left: -7vh;
+        bottom: 12%;
+      }
+      #runner2 .grid { right: -7vh; left: auto; }
+      .activity-legend {
+        position: absolute;
+        width: 64%;
+        right: 4%;
+        bottom: 23.5%;
+        opacity: .3;
+      }
+      .activity-legend.eric {
+        left: 4vh;
+        right: auto;
+      }
+
+      .runner { top: 0; position:absolute; width: 50%; height: 100vh; }
+      #runner1 { left:0; text-align: right; }
+      #runner1 img.background { position: absolute; top: -1%; height: 160%; left: -25%; opacity: .2;}
+      #runner2 { right:0; text-align: left; }
+      #runner2 img.background { position: absolute; top: -15%; height: 115%; right: -40%; opacity: .2;}
+      .runner h2 { font-size: 5vh; position: absolute; top: 6%; left: 36vh; color: rgba(100,100,100,.9); }
+      #runner2.runner h2 { right: 37vh; left: auto; }
+      .runner h2 .color {
+        display: inline-block;
+        height: 2.5vh;
+        width: 2.5vh;
+        vertical-align: baseline;
+        border: .8vh solid rgba(22, 105, 128, 1);
+        margin-left: .2em;
+        border-radius: 4vh;
+      }
+      #runner2.runner h2 .color { border: .8vh solid  rgba(224, 45, 27, 0.87); }
+
+      body {
+        background-color: #faf4e4;
+        background: linear-gradient(to bottom, #e0d5c0 0%,#faf4ef 100%);
+      }
+      .map { position: absolute; left: 50%; top: 5%; width: 26%; margin-left: -13%; }
+      #map-background { width: 100%; opacity: .4;}
+      #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
+      .graphs {
+        position: absolute;
+        left:0;
+        width: 100%;
+        bottom:0;
+        height: 22vh;
+        background-color: rgba(0,0,0,.0);
+      }
+      #time-series1 {
+        position: absolute;
+        bottom:0;
+        left:0;
+        width: 90%;
+        height: 22vh;
+      }
+      #time-series2 {
+        position: absolute;
+        bottom:0;
+        right:0;
+        width: 90%;
+        height: 22vh;
+      }
+      .legend {
+        position: absolute;
+        bottom: 0;
+        width: 18%;
+        left: 91%;
+        height: 22vh;
+        text-align: left;
+      }
+      .legend span {
+        display: block;
+        height: 33%;
+        background: rgba(0,0,0,.2);
+        margin-bottom: 1%;
+        padding: .5em;
+        box-sizing: border-box;
+        color: #faf4e4;
+        font-size: 1.75vh;
+      }
+      .legend .activity {
+        background-color: rgba(0,0,0,.5);
+        background: linear-gradient(to bottom, rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 100%);
+      }
+      .legend .focus {
+        background-color: rgba(61, 131, 161, 1);
+        background: linear-gradient(to bottom, rgba(61, 131, 161, 1) 0%, rgba(61, 161, 134, 0.5) 50%, rgba(61, 161, 110, 0) 100%);
+      }
+      .legend .excitement {
+        background-color: rgba(167, 39, 62, 1);
+        background: linear-gradient(to bottom, rgba(167, 39, 62, 1) 0%, rgba(213, 57, 7, 0.6) 30%, rgba(203, 184, 91, .2) 100%);
+      }
+      #runner2 .legend {
+        display: none;
+      }
+
+      @media (max-width: 860px) {
+        body {
+          overflow-y: auto;
+        }
+
+        .runner, .map {
+          display: block;
+          position: relative;
+          width: 100%;
+        }
+
+        .bounds {
+          position: absolute;
+          width: 100%;
+          height: 100vh;
+          top: 0;
+          left: 0;
+          overflow: hidden;
+        }
+
+        .grid {
+          display: none;
+        }
+        .activity-legend {
+          display: none;
+        }
+
+        #time-series1 {
+          width: 80%;
+        }
+        #time-series2 {
+          width: 80%;
+        }
+        .legend {
+          position: absolute;
+          bottom: 0;
+          width: 19%;
+          left: 81%;
+          height: 22vh;
+          text-align: left;
+        }
+        #runner2 .legend {
+          display: block;
+          left: 0;
+        }
+        .map { left: 10%; top: 5%; width: 80%; margin-left: 0; }
+      }
+    </style>
+    <script src="scripts/sylvester.js" type="text/javascript"></script>
+    <script src="scripts/glUtils.js" type="text/javascript"></script>
+    <script src="scripts/sketchbook-util.js" type="text/javascript"></script>
+    <script src="scripts/recorded-data.js" type="text/javascript"></script>
+    <script src="scripts/live-data.js" type="text/javascript"></script>
+    <script src="scripts/playback-data.js" type="text/javascript"></script>
+    <script src="scripts/grid.js" type="text/javascript"></script>
+    <script src="scripts/location.js" type="text/javascript"></script>
+    <script src="scripts/time-series.js" type="text/javascript"></script>
+    <script id="flat" type="x-shader/x-vertex">
+      precision mediump float;
+
+      attribute vec2 position;
+
+      void main(void) {
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    </script>
+
+    <script id="grid" type="x-shader/x-fragment">
+      precision mediump float;
+
+      uniform float theta;
+      uniform vec2 size;
+      uniform vec4 diagonals;
+      uniform float samples[25];
+      uniform vec2 offset;
+      uniform float weight;
+
+      void main(void) {
+        vec2 effectiveSize = vec2(1400.0);
+        vec2 center = effectiveSize*offset;
+        vec2 offset = effectiveSize*gl_FragCoord.xy/size.x - center;
+        float angle = atan(offset.y, offset.x);
+        float norm = length(offset);
+
+        vec4 angleOffset = diagonals - angle;
+        vec4 aShape = exp(-angleOffset*angleOffset*6.0);
+        float logR = log(norm*0.003);
+        float rShape = exp(-logR*logR*10.0);
+        float cShape = exp(-norm*norm * 0.00008);
+
+        vec4 signal = vec4(samples[0], samples[5], samples[10], samples[15]);
+
+        // float distort = 1.0-(.1*(1.0+sin(theta*.1))*exp(-offset*offset*.00001) * .2* sin(offset*.1 + theta*.1));
+
+        float distort = 1.0 + norm * 0.01;
+        float shape = rShape * dot(aShape,1.5*weight*signal) + cShape * weight*samples[20];
+        vec2 mapCoord = offset * mix(1.0,.6 + .35*sin(norm*.03 + .1*theta),shape);
+        vec2 coord = sin(0.15 *mapCoord);
+        float alpha = 50.0*(max(0.0,max(coord.x, coord.y))-1.0 + .04*shape);
+        // gl_FragColor = vec4(1.0,1.0,1.0, dot(aShape,vec4(rShape)) + cShape );
+        vec3 color = mix(vec3(0.4,0.48,0.4), vec3(0.3,0.45,0.5), clamp(4.0*shape,0.0,1.5));
+        gl_FragColor = vec4(color, alpha);
+      }
+    </script>
+
+  </head>
+
+  <body>
+    <div id="runner1" class="runner">
+      <div class="bounds">
+        <img class="background" src="eric.png"/>
+      </div>
+      <h2>ERIC <span class="color"></span></h2>
+      <img class="activity-legend eric" src="activity.png"/>
+      <canvas id="grid1" class="grid">
+        Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+      </canvas>
+      <canvas id="time-series1"></canvas>
+      <div class="legend">
+        <span class="activity">ACTIVITY</span>
+        <span class="focus">FOCUS</span>
+        <span class="excitement">EXCITEMENT</span>
+      </div>
+    </div>
+    <div id="runner2" class="runner">
+      <div class="bounds">
+        <img class="background" src="kelsey.png"/>
+      </div>
+      <h2>KELSEY <span class="color"></span></h2>
+      <img class="activity-legend kelsey" src="activity.png"/>
+      <canvas id="grid2" class="grid">
+        Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+      </canvas>
+      <canvas id="time-series2"></canvas>
+      <div class="legend">
+        <span class="activity">ACTIVITY</span>
+        <span class="focus">FOCUS</span>
+        <span class="excitement">EXCITEMENT</span>
+      </div>
+    </div>
+    <div class="map">
+      <img src="map-detailed.png" id="map-background"/>
+      <canvas id="location"></canvas>
+    </div>
+    </canvas>
+  </body>
+  <script>
+
+  /*
+    Eric - 59683FD7, 59684147
+    Kelsey - 59684800
+    Me - 596849CA
+   */
+  var ericSampler, kelseySampler;
+
+  // ericSampler = RecordedData('data/run-20160124-11_21.csv', 1, graphLeft);
+  // kelseySampler = RecordedData('data/run-20160206-04_45.csv', 1, graphRight);
+
+  // ericSampler = LiveData(['59683FD7','59684147','596849CA','5A68593D'], graphLeft);
+  // kelseySampler = LiveData(['59684800','596849CA','5A68590C'],graphRight);
+
+  ericSampler = PlaybackData(['59683FD7','59684147','596849CA'],
+    new Date('2016/03/06 07:56:30 est'),
+    new Date('2016/03/06 010:35:00 est'), graphLeft);
+  kelseySampler = PlaybackData(['59684800','596849CA'],
+    new Date('2016/03/06 07:56:30 est'),
+    new Date('2016/03/06 012:10:00 est'), graphRight);
+
+  // ericSampler = PlaybackData(['5A68593D'],
+  //   new Date('2017/02/12 11:30:00 est'),
+  //   new Date('2017/02/12 11:40:00 est'), graphLeft);
+
+  var timeSeries1 = document.getElementById('time-series1');
+  timeSeries1.width = timeSeries1.offsetWidth * (window.devicePixelRatio||1);
+  timeSeries1.height = timeSeries1.offsetHeight * (window.devicePixelRatio||1);
+  TimeSeries(timeSeries1, ericSampler, .001);
+
+  var timeSeries2 = document.getElementById('time-series2');
+  timeSeries2.width = timeSeries2.offsetWidth * (window.devicePixelRatio||1);
+  timeSeries2.height = timeSeries2.offsetHeight * (window.devicePixelRatio||1);
+  TimeSeries(timeSeries2, kelseySampler, .001);
+
+  window.onload = function() {
+    var locationCanvas = document.getElementById('location');
+    locationCanvas.width = 748;
+    locationCanvas.height = 1190;
+    Location(locationCanvas, ericSampler, kelseySampler);
+  }
+
+  function graphLeft() {
+    var canvas1 = document.getElementById('grid1');
+    canvas1.width = canvas1.offsetWidth * (window.devicePixelRatio||1);
+    canvas1.height = canvas1.offsetHeight * (window.devicePixelRatio||1);
+    Grid(canvas1, ericSampler, .5, .5);
+  }
+
+  function graphRight() {
+    var canvas = document.getElementById('grid2');
+    canvas.width = canvas.offsetWidth * (window.devicePixelRatio||1);
+    canvas.height = canvas.offsetHeight * (window.devicePixelRatio||1);
+    Grid(canvas, kelseySampler, .5, .5);
+  }
+
+  </script>
+</html>
