@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Chattanooga Marathon Brainwaves</title>
+    <title>Chattanooga Marathon Brainwaves - 5k</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,31 +21,25 @@
       background-color: #FAF4EF;
       background: linear-gradient(to bottom, #EDF1EF 0%,#FAF4EF 100%);
     }
-    .logo { position: absolute; top: 4vh; left: 4vh; width: 16vw; }
-    .links { position: absolute; top: 34vh; left: 2.2vw; width: 34vw; z-index: 1; }
-    a { color: rgb(62, 111, 141); text-decoration: none; margin: 5vw 0 0; display: inline-block;}
-    a h2 { font-family: metropolis-bold; margin: 0; font-size: 4.5vw; line-height: 4vw; }
-    a:first-child { margin: 2vw 0 0; }
-    a h3 { font-family: metropolis; margin: 0; font-size: 1.5vw; }
-    .grid { position:absolute; width: 36vw; height: 36vw; right: 24vw; top: -2vw; }
-    .activity-legend { position: absolute; width: 24vw; height: 24vw; right: 30vw; top: 4vw; opacity: 1; }
+    .logo { position: absolute; top: 3vh; left: 3vh; width: 10vw; }
+    .grid { position:absolute; width: 36vw; height: 36vw; right: 10vw; top: -2vw; }
+    .activity-legend { position: absolute; width: 24vw; height: 24vw; right: 16vw; top: 4vw; opacity: 1; }
     .runner { top: 0; position:absolute; width: 100%; height: 100vh; left:100%; text-align: right; display: none;
       opacity: 1;
       transition: left .5s ease, opacity .2s linear; }
     .runner.ondeck { left: 0; display: block; opacity:0; }
     .runner.active { left: 0; display: block; }
     .runner.exiting { left: 0; display: block; opacity: 0; }
-    .runner img.background { position: absolute; top: 0%; width: 30vw; right: 4vw; opacity: .5;}
-    .runner .shade { position: absolute; top: 50vh; width: 50vw; height: 40%; right: 6vw;
+    .runner img.background { position: absolute; top: 0%; width: 30vw; right: 42vw; opacity: .5;}
+    .runner .shade { position: absolute; top: 47vh; width: 24vw; height: 40%; right: 41vw;
       opacity: 0; transition: opacity 1s ease-in;
       background-color: rgba(248, 244, 239, 0.5);
       background: linear-gradient(to bottom, rgba(250, 244, 239, 0.5) 0%, rgb(248, 244, 239) 50%, rgb(248, 244, 239) 100%);
-      border-top: 1px solid rgb(62, 111, 141);
     }
     .runner.active .shade, .runner.active .bio { opacity: 1; }
-    .runner .bio { font-size: 2vh; line-height: 3vh; position: absolute; top: 52vh; height: 24vh; width:50%; right: 4vw;
+    .runner .bio { font-size: 2vh; line-height: 3vh; position: absolute; top: 56vh; height: 24vh; width:50%; right: 14vw;
       opacity: 0; transition: opacity 1s ease-in; text-align: left;
-      padding: 0 0 0 0; margin: 0 0 0 0; overflow: hidden; color: #787872;
+      padding: 0 0 0 0; margin: 0 0 0 0; overflow: hidden; color: #93938d;
     }
     #names { position: absolute; width:100%; height: 100%; top:0; left:0; z-index: 1; }
     #names h2 {
@@ -91,13 +85,13 @@
     #names .name7 .color { border-color: rgba(66, 65, 68, 0.87); }
     #names .name8 .color { border-color: rgba(157, 157, 157, 0.87); }
 
-    .map { position: absolute; left: -10%; top: -20%; width: 80%; }
-    #map-background { width: 100%; opacity: .1;}
+    .map { position: absolute; left: -5%; top: -10%; width: 50%; }
+    #map-background { width: 100%; opacity: .4;}
     #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
     .graphs { position: absolute; left:0; width: 100%; bottom:0; height: 22vh; background-color: rgba(0,0,0,.0); }
     .time-series { position: absolute; bottom:0; left:0; width: 90%; height: 22vh; transition: bottom .3s ease; }
     .exiting .time-series, .ondeck .time-series { bottom:-22vh; }
-    .legend { position: absolute; bottom: 0; width: 18%; left: 91%; height: 22vh; text-align: left; z-index: 1; }
+    .legend { position: absolute; bottom: 0; width: 18%; left: 91%; height: 22vh; text-align: left; }
     .legend span {
       display: block; height: 33%; background: rgba(0,0,0,.2); margin-bottom: 1%; padding: .5em;
       box-sizing: border-box; color: #faf4e4; font-size: 1.75vh;
@@ -117,17 +111,13 @@
 
     @media (max-width: 640px) {
       body { overflow-y: auto; }
+      .runner, .map { display: block; position: relative; width: 100%; }
       .bounds { position: absolute; width: 100%; height: 100vh; top: 0; left: 0; overflow: hidden; }
       .grid { display: none; }
       .activity-legend { display: none; }
-      .time-series { width: 100%; }
-      .legend { display: none; }
-      .map { width: 512px; }
-      .runner img.background { width: 192px; }
-      .runner .shade { top: 30vh; height: 60%; }
-      .runner.active .shade, .runner.active .bio { opacity: 1; }
-      .runner .bio { top: 32vh; height: 44vh; }
-
+      .time-series { width: 80%; }
+      .legend { position: absolute; bottom: 0; width: 19%; left: 81%; height: 22vh; text-align: left; }
+      .map { left: 10%; top: 5%; width: 80%; margin-left: 0; }
     }
     </style>
     <script src="scripts/sylvester.js" type="text/javascript"></script>
@@ -186,72 +176,101 @@
         gl_FragColor = vec4(color, alpha);
       }
     </script>
+    <script id="runner-template" type="text/html">
+      <div class="bounds">
+        <img class="background" src="{image}"/>
+        <div class="shade"></div>
+      </div>
+      <dir class="bio">{bio}</dir>
+      <canvas id="grid{index}" class="grid">
+        Your browser doesn't appear to support the WebGL needed to display this graphic.
+      </canvas>
+      <canvas id="time-series{index}" class="time-series"></canvas>
+    </script>
   </head>
 
   <body>
     <img class="logo" src="cmbw-logo-2x.png"/>
     <div class="map">
-      <img src="map-detailed-2017.png" id="map-background"/>
+      <img src="map-detailed-5k.png" id="map-background"/>
       <canvas id="location"></canvas>
     </div>
-    <div class="links">
-      <a href="5k.html">
-        <h2>5K Race</h2>
-        <h3>Streaming begins Sat. March 4 9:00a.m.</h3>
-      </a>
-      <a href="marathon.html">
-        <h2>Full Marathon</h2>
-        <h3>Streaming begins Sun. March 5 8:00a.m.</h3>
-      </a>
-    </div>
     <img class="activity-legend" src="activity.png"/>
+    <div id="names">
+    </div>
     <div class="legend">
       <span class="activity">ACTIVITY</span>
       <span class="focus">FOCUS</span>
       <span class="excitement">EXCITEMENT</span>
     </div>
-    <div id="runner0" class="runner active">
-      <div class="bounds">
-        <img class="background" src="eric2.png"/>
-        <div class="shade"></div>
-      </div>
-      <dir class="bio">The Chattanooga Marathon Brainwaves project will stream electroencephologram data from 8
-        runners running the 5K race and 10 runners running the full marathon. We will be visulizing this data
-        live on this website and on the Jumbotron at the finish line. Brainwave data will also be recorded for
-        more in-depth scientific study. Brainwaves can be used to study the relationship between stress and
-        performance. They can also be used to understand the relationship between the environment and peformance
-        in ways that may lead to better race courses.
-      </dir>
-      <canvas id="grid0" class="grid">
-        Your browser doesn't appear to support the WebGL needed to display this graphic.
-      </canvas>
-      <canvas id="time-series0" class="time-series"></canvas>
-    </div>
   </body>
   <script>
 
+  /*
+Me - 596849CA, 5A68593D
+
+1) 5A6858E4 Tim Morgan
+2) 5A68590C Paul Smith
+3) 59684800 Annette Tolliver
+4) 59684147 John Brown
+5) 596848FA Christine Brown
+6) 5A688204 Lauren Howell
+7) 5A68589E Zachary Corbett
+8) 5A68815C Melanie Commander
+   */
+  var runners = [
+    {name: "Try It", serials: ['5A68593D'], color:'rgba(0, 128, 182, 1)', image:'try_it.png', bio:"See what it looks like\
+      when you wear the EEG. The waves to the right show which parts of your brain are active right now.\
+      The graphs at the bottom show you mental activity over time. Activity shows the intensity of your brain waves.\
+      It increases the more you move. Focus shows your concentration leves. Look for it to increase as you find your pace.\
+      Excitement show how much your mental activity is changing. Look for it to go up when you're surprised or changing\
+      your activity."}
+  ];
+
+  var template = document.getElementById('runner-template').innerHTML;
+  var names = document.getElementById('names');
   var runnerLocations;
   var currentIndex = 0;
-  var timeouts = [], intervals = [], runners = [{}];
-  var runner = runners[0];
+  var timeouts = [], intervals = [];
 
-  // runner.sampler = PlaybackData(['5A68593D'],
-  //   new Date('2017/02/12 11:30:00 est'),
-  //   new Date('2017/02/12 11:40:00 est'), function() { graph(0, runner.sampler) });
+  runners.forEach(function(runner, index) {
+    var runnerDom = document.createElement('div');
+    runnerDom.id = 'runner' + index;
+    runnerDom.setAttribute('class',index == 0 ? 'runner active' : 'runner');
+    runnerDom.innerHTML = template.replace(/\{index\}/g, index).replace(/\{bio\}/g, runner.bio||'').replace(/\{image\}/g, runner.image);
+    document.body.appendChild(runnerDom);
 
-  runner.sampler = PlaybackData(['59683FD7','59684147','596849CA'],
-    new Date('2016/03/06 07:56:30 est'),
-    new Date('2016/03/06 08:25:00 est'), function() { graph(0, runner.sampler) });
+    var name = document.createElement('h2');
+    name.setAttribute('class',(index == 0 ? 'selected ' : '') + 'name'+index);
+    name.addEventListener('click',selectionHandler(index))
+    name.innerHTML = runner.name;
+    var color = document.createElement('span');
+    color.setAttribute('class', 'color');
+    name.appendChild(color);
+    names.appendChild(name);
 
+    // runner.sampler = PlaybackData(['5A68593D'],
+    //   new Date('2017/02/12 11:30:00 est'),
+    //   new Date('2017/02/12 11:40:00 est'), function() { graph(index, runner.sampler) });
 
-  var timeSeries = document.getElementById('time-series0');
-  var ts0 = document.getElementById('time-series0');
-  timeSeries.width = ts0.offsetWidth * (window.devicePixelRatio||1);
-  timeSeries.height = ts0.offsetHeight * (window.devicePixelRatio||1);
-  TimeSeries(timeSeries, runner.sampler, .001);
+    runner.sampler = LiveData(runner.serials, function() { graph(index, runner.sampler) });
+
+    var timeSeries = document.getElementById('time-series'+index);
+    var ts0 = document.getElementById('time-series0');
+    timeSeries.width = ts0.offsetWidth * (window.devicePixelRatio||1);
+    timeSeries.height = ts0.offsetHeight * (window.devicePixelRatio||1);
+    TimeSeries(timeSeries, runner.sampler, .001);
+  })
+
+  window.onload = function() {
+    var locationCanvas = document.getElementById('location');
+    locationCanvas.width = 748;
+    locationCanvas.height = 1190;
+    runnerLocations = Location(locationCanvas, runners);
+  }
 
   function graph(index, sampler) {
-    var canvas = document.getElementById('grid0');
+    var canvas = document.getElementById('grid'+index);
     var canvas0 = document.getElementById('grid0');
     canvas.width = canvas0.offsetWidth * (window.devicePixelRatio||1);
     canvas.height = canvas0.offsetHeight * (window.devicePixelRatio||1);
