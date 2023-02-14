@@ -1,7 +1,17 @@
-var pg = require('pg')
+var { Client } = require('pg')
 var QueryStream = require('pg-query-stream')
 var es = require('event-stream');
 var dateformat = require('dateformat');
+
+let client = new Client({
+  user: 'runner',
+  host: 'localhost',
+  database: 'chattmarathon',
+  password: 'runner',
+  port: 5432,
+})
+
+client.connect();
 
 var SIGNAL_COLUMNS = exports.SIGNAL_COLUMNS = [
   'theta_af3','alpha_af3','low_beta_af3','high_beta_af3','gamma_af3',
@@ -11,19 +21,14 @@ var SIGNAL_COLUMNS = exports.SIGNAL_COLUMNS = [
   'theta_pz','alpha_pz','low_beta_pz','high_beta_pz','gamma_pz' ]
 
 exports.saveSample = function saveSample(deviceId, time, lat, lon, data) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    if (err) return console.log(err);
-    if (data.length < 25) return console.log("ERROR: sample size too small", data.length)
-
-    client.query({
-      text:  "INSERT INTO emote_samples("+
-        "device_id, time, lat, lon,"+
-        SIGNAL_COLUMNS.join(',') +
-        ") VALUES ($1,$2,$3,$4," + parameters(SIGNAL_COLUMNS, 5) + ")",
-      name: "insert-emote-sample",
-      values: [deviceId,time,lat,lon].concat(data)
-    }, done);
-  });
+  client.query({
+    text:  "INSERT INTO emote_samples("+
+      "device_id, time, lat, lon,"+
+      SIGNAL_COLUMNS.join(',') +
+      ") VALUES ($1,$2,$3,$4," + parameters(SIGNAL_COLUMNS, 5) + ")",
+    name: "insert-emote-sample",
+    values: [deviceId,time,lat,lon].concat(data)
+  }).then(() => {}).catch(e => console.log(e))
 }
 
 exports.latestSampleStream = function latestSampleStream(range, deviceIds, cb) {

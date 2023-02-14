@@ -7,7 +7,7 @@ var JSONStream = require('JSONStream');
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ server: server, path: '/ws' });
 var db = require('./db');
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5500;
 
 var SAMPLE_SIZE = 26;
 var HISTORY_TIME_RANGE = 1800; // 30 minutes

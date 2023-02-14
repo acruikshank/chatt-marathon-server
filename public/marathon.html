@@ -232,7 +232,7 @@
 10) 5A6859A7 Emery Zarider
    */
   var runners = [
-    {name: "Stacey", serials: ['596848FA', '596849CA'], color:'rgba(0, 133, 170, 1)', image:'stacey.png', bio:"I have been\
+    {name: "Stacey", serials: [/*'596848FA'*/, '5A688F11', '596849CA'], color:'rgba(0, 133, 170, 1)', image:'stacey.png', bio:"I have been\
       running for about 20 years and have raced distances ranging from 1 to 100 miles on road and trail. To-date I’ve completed about 15 marathons\
       and hope to stay healthy enough for many more! My preferred distances are marathon and beyond. I am not an especially competitive person, so\
       running and racing for me is mostly about destressing, living in the moment, and enjoying the outdoors. I am excited to be a part of this\
@@ -344,7 +344,7 @@
   function selectionHandler(index) {
     return function() {
       currentIndex = index;
-
+      console.log('test')
       clearTimeouts();
       clearIntervals();
       runners.forEach(function(runner, i) {
