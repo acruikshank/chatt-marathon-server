@@ -9,7 +9,7 @@ var wss = new WebSocketServer({ server: server, path: '/ws' });
 var db = require('./db');
 var port = process.env.PORT || 5000;
 
-var SAMPLE_SIZE = 26;
+var SAMPLE_SIZE = 28;
 var HISTORY_TIME_RANGE = 1800; // 30 minutes
 
 var app = express();
@@ -25,6 +25,7 @@ app.use(function(req, res, next){
 app.use(express.static('public'));
 
 app.get('/recorded', function(req, res) {
+  console.log("RECORDED");
   var path = './public/recordings/';
   fs.readdir(path, function (err, files) {
     if(err) throw err;
@@ -37,8 +38,8 @@ app.get('/recorded', function(req, res) {
 })
 
 function recordDeviceData(device, session, lat, lon, data) {
-  for (var i=0; i<data.length; i+=26)
-    db.saveSample(device, new Date(1000*data[i]), lat, lon, Array.prototype.slice.call(data, i+1, i+26));
+  for (var i=0; i<data.length; i+=SAMPLE_SIZE)
+    db.saveSample(device, new Date(1000*data[i]), lat, lon, Array.prototype.slice.call(data, i+1, i+SAMPLE_SIZE));
 }
 
 app.post('/api/1.0/samples/:device/:session', function(req, res) {
@@ -50,6 +51,8 @@ app.post('/api/1.0/samples/:device/:session', function(req, res) {
     byteView[i] = body.charCodeAt(i);
 
   var samples = new Float64Array(buf);
+
+
   var start = new Date(1000*samples[0]);
   console.log('time:',start, 'user:',req.params.device, 'session:', req.params.session, 'length:',body.length / 8,
     'location:', req.headers['geo-position']);
