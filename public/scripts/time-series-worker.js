@@ -14,6 +14,7 @@ handlers.sample = function sample(s) {
 handlers.compute = function compute(buckets) {
   // TODO: Prune samples that are too old
   var avgEase = 75 / numSamples;
+  console.log(avgEase);
 
   // prepass
   var minTime = new Date(new Date().getTime()*2), maxTime = new Date(0);
@@ -66,6 +67,8 @@ handlers.compute = function compute(buckets) {
     lastMix = lerp(lastMix, value, avgEase);
     lastVar = lerp(lastVar, Math.pow(value-lastMix,2), avgEase);
     excitement[x|0] = rescale(excitementScale, lastVar);
+    if (isNaN(Math.max(maxExcitement, excitement[x|0])))
+      console.log("ME ERROR: value", x, lastVar, sample)
     maxExcitement = Math.max(maxExcitement, excitement[x|0])
   }
 

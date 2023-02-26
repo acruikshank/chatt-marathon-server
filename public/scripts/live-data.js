@@ -1,6 +1,6 @@
 LiveData = function(devices, ready, listener) {
   var DELAY = 7500;
-  var SAMPLE_SIZE = 26;
+  var SAMPLE_SIZE = 28;
   var out = {};
   var current, tail;
   var connection;

@@ -1,3 +1,5 @@
+const EMO_SAMPLES = 24;
+
 Grid = function grid(canvas, sampler, xOffset, yOffset, disabled) {
   var gl;
   var gridShader;
@@ -53,7 +55,7 @@ Grid = function grid(canvas, sampler, xOffset, yOffset, disabled) {
 
     var sample = sampler.getSample();
     var maxWeight = 0;
-    for (var j=0; j<sample.length; j++) {
+    for (var j=0; j<Math.min(sample.length, EMO_SAMPLES); j++) {
       sample[j] = lerp(lastSample[j],sample[j],ease);
       maxWeight = Math.max(maxWeight, sample[j]);
     }
