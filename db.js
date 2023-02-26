@@ -9,7 +9,7 @@ var SIGNAL_COLUMNS = exports.SIGNAL_COLUMNS = [
   'theta_t7','alpha_t7','low_beta_t7','high_beta_t7','gamma_t7',
   'theta_t8','alpha_t8','low_beta_t8','high_beta_t8','gamma_t8',
   'theta_pz','alpha_pz','low_beta_pz','high_beta_pz','gamma_pz',
-  'heart_rate', 'hrv' ];
+  'heart_rate', 'hrv', 'rr0', 'rr1', 'rr2', 'rr3' ];
 
 const connect = async () => {
   const client = new Client({connectionString: process.env.DATABASE_URL});
@@ -23,8 +23,9 @@ const connect = async () => {
 }
 
 exports.saveSample = async (deviceId, time, lat, lon, data) => {
-  if (data.length < 25) 
+  if (data.length < SIGNAL_COLUMNS.length) 
     return console.log("ERROR: sample size too small", data.length);
+  console.log("HEART RATE INFO", data.slice(25).map(f=>f.toFixed(3)));
 
   const client = await connect();
   try {
