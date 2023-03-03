@@ -31,7 +31,7 @@
     .runner.active { left: 0; display: block; }
     .runner.exiting { left: 0; display: block; opacity: 0; }
     .runner img.background { position: absolute; top: 0%; width: 30vw; right: 38vw; opacity: .5;}
-    .runner .shade { position: absolute; top: 47vh; width: 24vw; height: 40%; right: 41vw;
+    .runner .shade { position: absolute; top: 47vh; width: 32vw; height: 40%; right: 41vw;
       opacity: 0; transition: opacity 1s ease-in;
       background-color: rgba(248, 244, 239, 0.5);
       background: linear-gradient(to bottom, rgba(250, 244, 239, 0.5) 0%, rgb(248, 244, 239) 50%, rgb(248, 244, 239) 100%);
@@ -43,24 +43,26 @@
     }
     #names { position: absolute; width:100%; height: 100%; top:0; left:0; z-index: 1; }
     #names h2 {
-      font-size: 1.8vh; position: absolute; top: 4%; margin: 0; right: 0; color: rgba(100,100,100,.9); text-transform: uppercase;
+      font-size: 1.8vh; position: absolute; top: 2%; margin: 0; right: 0; color: rgba(100,100,100,.9); text-transform: uppercase;
       cursor: pointer; white-space: nowrap;
       transition: top .4s ease, right 1.3s ease, color .3s linear, font-size 1s ease, width 1s ease;
       width: 8%;
       border-top: 1px solid rgb(125, 125, 125);
       padding: 1vh 1vh 4vh;
     }
-    #names h2.name1 {top:11%;}
-    #names h2.name2 {top:18%;}
-    #names h2.name3 {top:25%;}
-    #names h2.name4 {top:32%;}
-    #names h2.name5 {top:39%;}
-    #names h2.name6 {top:46%;}
-    #names h2.name7 {top:53%;}
-    #names h2.name8 {top:60%;}
-    #names h2.name9 {top:67%;}
+    #names h2.name1 {top:8%;}
+    #names h2.name2 {top:14%;}
+    #names h2.name3 {top:20%;}
+    #names h2.name4 {top:24%;}
+    #names h2.name5 {top:30%;}
+    #names h2.name6 {top:36%;}
+    #names h2.name7 {top:42%;}
+    #names h2.name8 {top:48%;}
+    #names h2.name9 {top:54%;}
+    #names h2.name10 {top:60%;}
+    #names h2.name11 {top:66%;}
     #names h2.selected {
-      text-transform: capitalize; top:47vh; right:42vw; font-size: 6vh; width: 20vw; font-family: 'metropolis-bold', sans-serif;
+      text-transform: capitalize; top:47vh; right:44vw; font-size: 6vh; width: 24vw; font-family: 'metropolis-bold', sans-serif;
       color: rgb(62, 111, 141); border-color: rgb(62, 111, 141);
     }
     #names h2 .color {
@@ -190,7 +192,7 @@
         <img class="background" src="{image}"/>
         <div class="shade"></div>
       </div>
-      <dir class="bio">{bio}</dir>
+      <div class="bio">{bio}</div>
       <canvas id="grid{index}" class="grid">
         Your browser doesn't appear to support the WebGL needed to display this graphic.
       </canvas>
@@ -232,8 +234,8 @@
 10) 5A6859A7 
    */
   var runners = [
-    {name: "Deanna", serials: ['5A6859A7'], color:'rgba(0, 128, 182, 1)', image:'felix.png', bio:"Deanna Mcfadgon is a 20-year-old student of Exercise Science at the University of Tennessee at Chattanooga, who is eagerly preparing for the upcoming Chattanooga marathon. With a weekly run of 10 miles, Deanna is committed to maintaining her fitness and conditioning her body for the rigorous demands of the race. She has already completed 1 full marathon and 1 half marathon, demonstrating her passion and dedication for the sport. Deanna's education in Exercise Science gives her a unique understanding of the physical and mental aspects of running."},
     {name: "Sean", serials: ['59684800'], color:'rgba(0, 128, 182, 1)', end_time:'2017/03/05 13:00:00 est', image:'runners/sean.png', bio:"Sean Feagin is a PE teacher at Lookout Valley Middle High School who will be running the Chattanooga Marathon. While he balances his career with running, he makes time to train and maintain his fitness. With dedication and a passion for physical activity, Sean is looking forward to the challenge of completing the marathon."},
+    {name: "Deanna", serials: ['5A6859A7'], color:'rgba(0, 128, 182, 1)', image:'female.png', bio:"Deanna Mcfadgon is a 20-year-old student of Exercise Science at the University of Tennessee at Chattanooga, who is eagerly preparing for the upcoming Chattanooga marathon. With a weekly run of 10 miles, Deanna is committed to maintaining her fitness and conditioning her body for the rigorous demands of the race. She has already completed 1 full marathon and 1 half marathon, demonstrating her passion and dedication for the sport. Deanna's education in Exercise Science gives her a unique understanding of the physical and mental aspects of running."},
     {name: "Matt J", serials: ['5A688F48'], color:'rgba(0, 128, 182, 1)', image:'runners/mattj.png', bio:"Matt Jenkins is a 29-year-old med student at Vanderbilt University who will be running the Chattanooga marathon. He runs an impressive 60 miles per week and has completed 4 full marathons and 4 half marathons. With his extensive knowledge of the human body, Matt is not only a talented runner but also has a deep understanding of how to care for his body before, during, and after a race."},
     {name: "Dan", serials: ['59683FD7'], color:'rgba(0, 128, 182, 1)', end_time:'2017/03/05 13:00:00 est', image:'runners/dan.png', bio:"Dan Basler is a 49-year-old runner who will be participating in the Chattanooga Marathon. He is married to Carlene and they have two children, Elias and Finnlea. Despite his busy schedule as a PE teacher at CSLA, Dan manages to run 8 miles a week to stay in shape. He has completed two full marathons and two half marathons, demonstrating his dedication and passion for running. Dan is excited to take on the challenge of the Chattanooga Marathon and is confident that his training and experience will help him cross the finish line successfully."},
     {name: "Andrew", serials: ['5A68593D'], color:'rgba(0, 128, 182, 1)', end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:"Andrew Hull is a participant in the Chattanooga Marathon. He is a student at the University of Tennessee at Chattanooga (UTC), where he is studying Sport Management. Andrew has a passion for sports and fitness, and enjoys running in his spare time. He is looking forward to challenging himself in the Chattanooga Marathon and is excited to take on this new adventure."},
