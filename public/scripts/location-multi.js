@@ -30,7 +30,7 @@ Location = function(canvas, runners) {
       }
     }
     if (runners[activeIndex].location)
-      renderRunner(runners[activeIndex], activeIndex, runners[activeIndex].color, true)
+      renderRunner(runners[activeIndex], activeIndex, true)
 
     theta += dTheta;
     requestAnimationFrame(render);
