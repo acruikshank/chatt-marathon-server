@@ -45,13 +45,12 @@ exports.saveSample = async (deviceId, time, lat, lon, data) => {
 }
 
 exports.latestSampleStream = function latestSampleStream(range, deviceIds, cb) {
-  // var since = "timestamp '2023-02-26 16:15:00.00'"
-  var since = 'NOW()'
+  var since = "timestamp '2023-03-05 07:15:00.00 -5:00'"
+  // var since = 'NOW()'
   var sql = "select device_id, time, lat, lon,"
     + SIGNAL_COLUMNS.join(',')
     + " from emote_samples where time + ($1 || ' second')::interval > "+since
     +" and device_id in (" + parameters(deviceIds, 2) + ") order by time";
-    console.log(sql)
   sampleStream(new QueryStream(sql, [range].concat(deviceIds)), cb);
 }
 
