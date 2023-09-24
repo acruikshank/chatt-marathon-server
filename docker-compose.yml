@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+  database:
+    image: 'postgres:latest'
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: chama
+      POSTGRES_PASSWORD: chama
+      POSTGRES_DB: marathon_2023
+
+    volumes:
+      - ../db-data/:/var/lib/postgresql/data/
