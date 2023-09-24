@@ -16,7 +16,7 @@ const connect = async () => {
   try {
     await client.connect();
   } catch (err) {
-    console.erro(err);
+    console.error(err);
     throw err;
   }
   return client;
