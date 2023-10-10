@@ -91,8 +91,14 @@
     #map-background { width: 100%; opacity: .2;}
     #location { position: absolute; left: 0; width: 100%; top: 0; height: 100%;}
     .graphs { position: absolute; left:0; width: 100%; bottom:0; height: 22vh; background-color: rgba(0,0,0,.0); }
-    .time-series { position: absolute; bottom:0; left:0; width: 90%; height: 22vh; transition: bottom .3s ease; }
-    .exiting .time-series, .ondeck .time-series { bottom:-22vh; }
+    .time-series, .eclipse-event { position: absolute; bottom:0; left:0; width: 90%; height: 22vh; transition: bottom .3s ease; overflow: hidden; }
+    .exiting .time-series, .ondeck .time-series, .exiting .eclipse-event, .ondeck .eclipse-event { bottom:-22vh; }
+    .eclipse-event .shadow { position:absolute; height: 100%; width: 60%; left: 120%; background: rgba(0,0,0,.1); border: 1px solid black;
+      border-width: 0 0.1rem; overflow: hidden; }
+    .eclipse-event .anulus { position:absolute; height: 100%; width: 40%; left: 130%; background: rgba(0,0,0,.2); border: 1px solid black;
+      border-width: 0 0.1rem; overflow: hidden; }
+    .eclipse-event .shadow > label, .eclipse-event .anulus > label { color: black; position: absolute; left: 0rem; 
+      font-family: 'metropolis-bold', sans-serif; top: -0.5rem; font-size: 0.75rem; transform: rotate(90deg); transform-origin: bottom left; }
     .legend { position: absolute; bottom: 0; width: 18%; left: 91%; height: 22vh; text-align: left; }
     .legend span {
       display: block; height: 33%; background: rgba(0,0,0,.2); margin-bottom: 1%; padding: .5em;
@@ -139,7 +145,7 @@
     <script src="scripts/playback-data.js" type="text/javascript"></script>
     <script src="scripts/grid.js" type="text/javascript"></script>
     <script src="scripts/location-multi.js" type="text/javascript"></script>
-    <script src="scripts/time-series.js" type="text/javascript"></script>
+    <script src="scripts/time-series-eclipse.js" type="text/javascript"></script>
     <script id="flat" type="x-shader/x-vertex">
       precision mediump float;
 
@@ -196,6 +202,10 @@
       <canvas id="grid{index}" class="grid">
         Your browser doesn't appear to support the WebGL needed to display this graphic.
       </canvas>
+      <div id="eclipse-event{index}" class="eclipse-event">
+        <div class="shadow"><label>SHADOW</label></div>
+        <div class="anulus"><label>ANULUS</label></div>
+      </div>  
       <canvas id="time-series{index}" class="time-series"></canvas>
     </script>
   </head>
@@ -210,17 +220,17 @@
     <div id="names">
     </div>
     <div class="legend">
-      <span class="activity">ACTIVITY</span>
-      <span class="focus">FOCUS</span>
-      <span class="excitement">EXCITEMENT</span>
+      <span class="activity">ENGAGEMENT</span>
+      <span class="focus">VALENCE</span>
+      <span class="excitement">REFLECTIVITY</span>
     </div>
   </body>
   <script>
 
   /*
-    Eric - 59683FD7, 59684147
-    Kelsey - 59684800
-    Me - 596849CA,
+    59683FD7, 59684147
+    59684800
+    596849CA,
 
 1) 5A6858E4 
 2) 5A68590C 
@@ -235,8 +245,9 @@
 5A688F18
    */
   var runners = [
-  {name: "Alex", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:"Just checking out the eclipse."},
-  {name: "Alex", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:"Just checking out the eclipse."},
+  {name: "Viewer 1", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  {name: "Viewer 2", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  {name: "Viewer 3", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
     // {name: "Sean", serials: ['59684800'], color:'rgba(0, 128, 182, 1)', end_time:'2017/03/05 13:00:00 est', image:'runners/sean.png', bio:"Sean Feagin is a PE teacher at Lookout Valley Middle High School who will be running the Chattanooga Marathon. While he balances his career with running, he makes time to train and maintain his fitness. With dedication and a passion for physical activity, Sean is looking forward to the challenge of completing the marathon."},
     // {name: "Deanna", serials: ['5A6859A7'], color:'rgba(0, 128, 182, 1)', image:'female.png', bio:"Deanna Mcfadgon is a 20-year-old student of Exercise Science at the University of Tennessee at Chattanooga, who is eagerly preparing for the upcoming Chattanooga marathon. With a weekly run of 10 miles, Deanna is committed to maintaining her fitness and conditioning her body for the rigorous demands of the race. She has already completed 1 full marathon and 1 half marathon, demonstrating her passion and dedication for the sport. Deanna's education in Exercise Science gives her a unique understanding of the physical and mental aspects of running."},
     // {name: "Matt J", serials: ['5A688F48'], color:'rgba(0, 128, 182, 1)', image:'runners/mattj.png', bio:"Matt Jenkins is a 29-year-old med student at Vanderbilt University who will be running the Chattanooga marathon. He runs an impressive 60 miles per week and has completed 4 full marathons and 4 half marathons. With his extensive knowledge of the human body, Matt is not only a talented runner but also has a deep understanding of how to care for his body before, during, and after a race."},
@@ -256,6 +267,11 @@
   var currentIndex = 0;
   var timeouts = {}, intervals = {};
 
+  const shadowStart = new Date("Mon Oct 09 2023 16:28:00 GMT-0400 (Eastern Daylight Time)").getTime();
+  const anulusStart = new Date("Mon Oct 09 2023 16:29:00 GMT-0400 (Eastern Daylight Time)").getTime();
+  const anulusEnd =  new Date("Mon Oct 09 2023 16:30:00 GMT-0400 (Eastern Daylight Time)").getTime();
+  const shadowEnd = new Date("Mon Oct 09 2023 16:31:00 GMT-0400 (Eastern Daylight Time)").getTime();
+  
   runners.forEach(function(runner, index) {
     var runnerDom = document.createElement('div');
     runnerDom.id = 'runner' + index;
@@ -282,7 +298,22 @@
     var ts0 = document.getElementById('time-series0');
     timeSeries.width = ts0.offsetWidth * (window.devicePixelRatio||1);
     timeSeries.height = ts0.offsetHeight * (window.devicePixelRatio||1);
-    TimeSeries(timeSeries, runner.sampler, .001);
+
+    const eclipseShadow = document.querySelector(`#eclipse-event${index} .shadow`)
+    const eclipseAnulus = document.querySelector(`#eclipse-event${index} .anulus`)
+    const timePercent = (time, minTime, maxTime) => 100 * (time - minTime) / (maxTime - minTime);
+    const updateEclipse = (result) => {
+      if (result.minTime > result.maxTime) return;
+      const shadowLeft = timePercent(shadowStart, result.minTime, result.maxTime);
+      eclipseShadow.style.left = `${shadowLeft}%`;
+      eclipseShadow.style.width = `${timePercent(shadowEnd, result.minTime, result.maxTime) - shadowLeft}%`;
+
+      const anulusLeft = timePercent(anulusStart, result.minTime, result.maxTime);
+      eclipseAnulus.style.left = `${anulusLeft}%`;
+      eclipseAnulus.style.width = `${timePercent(anulusEnd, result.minTime, result.maxTime) - anulusLeft}%`;
+    }
+
+    TimeSeries(timeSeries, runner.sampler, .001, updateEclipse);
   })
 
   window.onload = function() {

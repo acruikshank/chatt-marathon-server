@@ -45,7 +45,7 @@ exports.saveSample = async (deviceId, time, lat, lon, data) => {
 }
 
 exports.latestSampleStream = function latestSampleStream(range, deviceIds, cb) {
-  var since = "timestamp '2023-03-05 07:15:00.00 -5:00'"
+  var since = "timestamp '2023-10-10 07:15:00.00 -5:00'"
   // var since = 'NOW()'
   var sql = "select device_id, time, lat, lon,"
     + SIGNAL_COLUMNS.join(',')

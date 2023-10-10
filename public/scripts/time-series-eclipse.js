@@ -5,7 +5,7 @@ TimeSeries = function(canvas, sampler, avgEase, onTimeSeriesResult) {
   avgEase = avgEase || .5;
 
   // WORKER
-  var worker = new Worker('scripts/time-series-worker.js');
+  var worker = new Worker('scripts/time-series-worker-eclipse.js');
 
   sampler.setListener(function(sample) {
     worker.postMessage({t:'sample', args:[sample]})
@@ -39,7 +39,7 @@ TimeSeries = function(canvas, sampler, avgEase, onTimeSeriesResult) {
     gradient1.addColorStop(1 - (computed.maxActivity / maxValue),'rgba(0,0,0, 0.5)');
     gradient1.addColorStop(1,'rgba(0,0,0, 0.0)');
 
-    graphData(ctx, computed.activity, scale, {
+    graphData(ctx, computed.activity, scale * maxValue / computed.maxActivity, {
       fillStyle: gradient1,
       lineWidth: 2,
       strokeStyle: 'rgba(60, 60, 60, 1.0)'
@@ -47,11 +47,11 @@ TimeSeries = function(canvas, sampler, avgEase, onTimeSeriesResult) {
 
     // focus
     var focusGradient = ctx.createLinearGradient(0,0,0,ch);
-    focusGradient.addColorStop(1 - (computed.maxFocus / maxValue),'rgba(61, 131, 161, 1)');
-    focusGradient.addColorStop(1 - .5 * (computed.maxFocus / maxValue),'rgba(61, 161, 134, 0.5)');
+    focusGradient.addColorStop(0,'rgba(61, 131, 161, 1)');
+    focusGradient.addColorStop(.5,'rgba(61, 161, 134, 0.5)');
     focusGradient.addColorStop(1,'rgba(61, 161, 110, 0)');
 
-    graphData(ctx, computed.focus, scale, {
+    graphData(ctx, computed.focus, scale * maxValue / computed.maxFocus, {
       fillStyle: focusGradient,
       lineWidth: 2,
       strokeStyle: 'rgba(60, 60, 60, 1)'
@@ -59,11 +59,11 @@ TimeSeries = function(canvas, sampler, avgEase, onTimeSeriesResult) {
 
     // excitement
     var excitementGradient = ctx.createLinearGradient(0,0,0,ch);
-    excitementGradient.addColorStop(1-(computed.maxExcitement / maxValue),'rgba(167, 39, 62, 1)');
-    excitementGradient.addColorStop(1 - .3 * (computed.maxExcitement / maxValue),'rgba(213, 57, 7, 0.6)');
+    excitementGradient.addColorStop(0,'rgba(167, 39, 62, 1)');
+    excitementGradient.addColorStop(.7,'rgba(213, 57, 7, 0.6)');
     excitementGradient.addColorStop(1,'rgba(203, 184, 91, .2)');
 
-    graphData(ctx, computed.excitement, scale, {
+    graphData(ctx, computed.excitement, scale * maxValue / computed.maxExcitement, {
       fillStyle: excitementGradient,
       lineWidth: 2,
       strokeStyle: 'rgba(60, 60, 60, 1)'

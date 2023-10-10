@@ -79,7 +79,9 @@ handlers.compute = function compute(buckets) {
     focus: focus,
     maxFocus: maxFocus,
     excitement: excitement,
-    maxExcitement: maxExcitement
+    maxExcitement: maxExcitement,
+    minTime: minTime,
+    maxTime: maxTime,
   }]})
 }
 
