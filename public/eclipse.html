@@ -245,13 +245,14 @@
 5A688F18
    */
   var runners = [
-  // {name: "Viewer 1", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
-  // {name: "Viewer 2", serials: ['5A6859A7'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
-  // {name: "Viewer 3", serials: ['59683FD7'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  {name: "Viewer 1", serials: ['5A688204'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  {name: "Viewer 2", serials: ['5A6859A7'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  {name: "Viewer 3", serials: ['59683FD7'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
 
-  {name: "Viewer 1", serials: ['59684147'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
-  {name: "Viewer 2", serials: ['5A68590C'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
-  {name: "Viewer 3", serials: ['5A68815C'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  // backups
+  // {name: "Viewer 1", serials: ['59684147'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  // {name: "Viewer 2", serials: ['5A68590C'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
+  // {name: "Viewer 3", serials: ['5A68815C'], end_time:'2017/03/05 13:00:00 est', image:'male.png', bio:""},
 
   // {name: "Sean", serials: ['59684800'], color:'rgba(0, 128, 182, 1)', end_time:'2017/03/05 13:00:00 est', image:'runners/sean.png', bio:"Sean Feagin is a PE teacher at Lookout Valley Middle High School who will be running the Chattanooga Marathon. While he balances his career with running, he makes time to train and maintain his fitness. With dedication and a passion for physical activity, Sean is looking forward to the challenge of completing the marathon."},
     // {name: "Deanna", serials: ['5A6859A7'], color:'rgba(0, 128, 182, 1)', image:'female.png', bio:"Deanna Mcfadgon is a 20-year-old student of Exercise Science at the University of Tennessee at Chattanooga, who is eagerly preparing for the upcoming Chattanooga marathon. With a weekly run of 10 miles, Deanna is committed to maintaining her fitness and conditioning her body for the rigorous demands of the race. She has already completed 1 full marathon and 1 half marathon, demonstrating her passion and dedication for the sport. Deanna's education in Exercise Science gives her a unique understanding of the physical and mental aspects of running."},
@@ -272,10 +273,10 @@
   var currentIndex = 0;
   var timeouts = {}, intervals = {};
 
-  const shadowStart = new Date("Mon Oct 09 2023 16:28:00 GMT-0400 (Eastern Daylight Time)").getTime();
-  const anulusStart = new Date("Mon Oct 09 2023 16:29:00 GMT-0400 (Eastern Daylight Time)").getTime();
-  const anulusEnd =  new Date("Mon Oct 09 2023 16:30:00 GMT-0400 (Eastern Daylight Time)").getTime();
-  const shadowEnd = new Date("Mon Oct 09 2023 16:31:00 GMT-0400 (Eastern Daylight Time)").getTime();
+  const shadowStart = 1697296920000; // Sat Oct 14 2023 10:22:00 GMT-0500 (Central Daylight Time)
+  const anulusStart = 1697302200000; // Sat Oct 14 2023 11:50:00 GMT-0500 (Central Daylight Time)
+  const anulusEnd =  1697302495000;  // Sat Oct 14 2023 11:54:55 GMT-0500 (Central Daylight Time)
+  const shadowEnd = 1697308200000;   // Sat Oct 14 2023 13:30:00 GMT-0500 (Central Daylight Time)
   
   runners.forEach(function(runner, index) {
     var runnerDom = document.createElement('div');
